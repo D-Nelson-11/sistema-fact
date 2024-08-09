@@ -26,7 +26,7 @@ export const SidebarData = [
   },
   {
     title: 'Inventario',
-    path: '/products',
+    path: '/Inventario',
     icon: <FaIcons.FaCartPlus />
   },
   {
