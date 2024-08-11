@@ -3,6 +3,7 @@ import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
 import * as RiIcons from 'react-icons/ri';
+import { MdOutlinePointOfSale } from "react-icons/md";
 
 export const SidebarData = [
   {
@@ -30,13 +31,13 @@ export const SidebarData = [
     icon: <FaIcons.FaCartPlus />
   },
   {
+    title: 'Factura',
+    path: '/factura',
+    icon: <MdOutlinePointOfSale />
+  },
+  {
     title: 'Clientes',
     path: '/team',
     icon: <IoIcons.IoMdPeople />
   },
-  {
-    title: 'Support',
-    path: '/support',
-    icon: <IoIcons.IoMdHelpCircle />
-  }
 ];

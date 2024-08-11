@@ -2,8 +2,6 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import Inventario from "./pages/Inventario";
 import { Reports } from "./pages/Reports";
-import Team from "./pages/Team";
-
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
@@ -12,9 +10,11 @@ import * as AiIcons from "react-icons/ai";
 import { SidebarData } from "./components/Sidebar/SidebarData";
 import SubMenu from "./components/Sidebar/SubMenu";
 import { IconContext } from "react-icons/lib";
+import { colors } from "./helpers/themes";
+import Factura from "./pages/Factura";
 
 const Nav = styled.div`
-  background: #1a2237;
+  background: ${colors.themeColor};
   height: 50px;
   display: flex;
   justify-content: flex-start;
@@ -31,7 +31,7 @@ const NavIcon = styled(Link)`
 `;
 
 const SidebarNav = styled.nav`
-  background: #1a2237;
+  background:  ${colors.themeColor};
   width: 250px;
   height: 100vh;
   display: flex;
@@ -83,7 +83,7 @@ function App() {
           <Routes>
             <Route path="/Inventario" element={<Inventario />} />
             <Route path="/reports" element={<Reports />} />
-            <Route path="/team" element={<Team />} />
+            <Route path="/factura" element={<Factura />} />
           </Routes>
         </MainContent>
       </IconContext.Provider>

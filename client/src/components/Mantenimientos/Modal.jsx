@@ -1,6 +1,7 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
+import { colors } from "../../helpers/themes";
 
 
 function ModalC({ContenidoModal,Nombre}) {
@@ -9,7 +10,7 @@ function ModalC({ContenidoModal,Nombre}) {
   
     return (
       <>
-        <Button onClick={() => setLgShow(true)} style={{width:"200px"}}>{Nombre}</Button>
+        <Button onClick={() => setLgShow(true)} style={{width:"200px", backgroundColor:colors.themeColor, border:"none"}}>{Nombre}</Button>
         <Modal
           size="xl"
           show={lgShow}
