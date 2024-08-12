@@ -14,7 +14,6 @@ const rows = [
 ];
 
 export default function Tabla({columns}) {
-  useEffect(()=>{console.log(columns)},[])
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 

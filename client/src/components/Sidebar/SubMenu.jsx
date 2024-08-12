@@ -33,11 +33,18 @@ const DropdownLink = styled(Link)`
   text-decoration: none;
   color: #f5f5f5;
   font-size: 18px;
+  transition: background 0.3s ease, color 0.3s ease;
 
   &:hover {
     background: #632ce4;
     cursor: pointer;
   }
+`;
+
+const DropdownContainer = styled.div`
+  max-height: ${({ isOpen }) => (isOpen ? '500px' : '0')};
+  overflow: hidden;
+  transition: max-height 0.5s ease;
 `;
 
 const SubMenu = ({ item }) => {
@@ -60,15 +67,17 @@ const SubMenu = ({ item }) => {
             : null}
         </div>
       </SidebarLink>
-      {subnav &&
-        item.subNav.map((item, index) => {
-          return (
-            <DropdownLink to={item.path} key={index}>
-              {item.icon}
-              <SidebarLabel>{item.title}</SidebarLabel>
-            </DropdownLink>
-          );
-        })}
+      <DropdownContainer isOpen={subnav}>
+        {item.subNav &&
+          item.subNav.map((subItem, index) => {
+            return (
+              <DropdownLink to={subItem.path} key={index}>
+                {subItem.icon}
+                <SidebarLabel>{subItem.title}</SidebarLabel>
+              </DropdownLink>
+            );
+          })}
+      </DropdownContainer>
     </>
   );
 };

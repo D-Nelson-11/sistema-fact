@@ -12,7 +12,7 @@ const Inventario = () => {
   return (
     <div className="center w-75">
       <div className="mb-2">
-        <ModalC Nombre="Crear"/>
+        <ModalC Nombre="Añadir"/>
       </div>
       <Tabla columns={columnas} />
     </div>
