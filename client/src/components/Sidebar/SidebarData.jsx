@@ -40,4 +40,9 @@ export const SidebarData = [
     path: '/team',
     icon: <IoIcons.IoMdPeople />
   },
+  {
+    title: 'Parámetros',
+    path: '/team',
+    icon: <IoIcons.IoMdPeople />
+  },
 ];

@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import "./App.css";
+import "./public/App.css";
 import Inventario from "./pages/Inventario";
 import { Reports } from "./pages/Reports";
 import React, { useState } from "react";
@@ -11,7 +11,7 @@ import { SidebarData } from "./components/Sidebar/SidebarData";
 import SubMenu from "./components/Sidebar/SubMenu";
 import { IconContext } from "react-icons/lib";
 import { colors } from "./helpers/themes";
-import Factura from "./pages/Factura";
+import Factura from "./pages/Factura/Factura";
 
 const Nav = styled.div`
   background: ${colors.themeColor};
