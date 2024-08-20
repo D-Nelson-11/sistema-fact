@@ -9,22 +9,27 @@ import Paper from "@mui/material/Paper";
 import Datos from "./Datos";
 import { Form } from "react-bootstrap";
 import { useState } from "react";
+import SearchBar from "../../components/SearchBar";
 
 const TAX_RATE = 0.07;
 
 export default function Factura() {
   const [editable, setEditable] = useState(null); // Estado para rastrear qué fila se está editando
   const [rows, setRows] = useState([
-    { nombre: "perro", cantidad: 3, precio: 20 },
-    { nombre: "perro1", cantidad: 2, precio: 20 },
-    { nombre: "perro2", cantidad: 2, precio: 20 },
+
   ]);
+
+  const items = [{ Nombre: "Lapices", cantidad: 0, precio: 0 },{ Nombre: "Cuaderno", cantidad: 0, precio: 20 }]
   
   const [subTotal, setSubTotal] = useState(calculateSubtotal(rows));
 
   const handleDoubleClick = (index) => {
     setEditable(index); // Establecer la fila que se está editando
   };
+
+  const setRowsHelp = (value)=>{
+    setRows([...rows,value])
+  }
 
   const handleCantidadChange = (index, value) => {
     const updatedRows = [...rows];
@@ -48,28 +53,28 @@ export default function Factura() {
       className="center d-flex h-auto justify-content-between flex-wrap"
       style={{ width: "80%" }}>
       <Form className="w-100">
-        <Form.Group className="mb-3">
-          <Form.Label>Buscar</Form.Label>
-          <Form.Control type="text" placeholder="Nombre" size="sm" />
-        </Form.Group>
+       <SearchBar items={items} setRowsHelp={setRowsHelp}/>
       </Form>
       <div style={{ width: "70%" }}>
         <TableContainer
           component={Paper}
-          sx={{ width: "100%", height: "auto" }}>
-          <Table sx={{ minWidth: 600 }} aria-label="spanning table">
+          sx={{ width: "100%", height: "auto", maxHeight:"500px" }}>
+          <Table sx={{ minWidth: 600 }} aria-label="spanning table" stickyHeader>
             <TableHead>
               <TableRow>
                 <TableCell align="left">Nombre</TableCell>
                 <TableCell align="left">Cantidad</TableCell>
                 <TableCell align="left">Precio</TableCell>
                 <TableCell align="left">Total</TableCell>
+                {rows.length > 0 && (
+                  <TableCell align="left">Accion</TableCell>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
               {rows?.map((row, index) => (
-                <TableRow key={row.nombre}>
-                  <TableCell>{row.nombre}</TableCell>
+                <TableRow key={row.index}>
+                  <TableCell>{row.Nombre}</TableCell>
                   <TableCell align="left" onDoubleClick={() => handleDoubleClick(index)}>
                     {editable === index ? (
                       <input
@@ -87,6 +92,7 @@ export default function Factura() {
                   </TableCell>
                   <TableCell align="left">{row.precio}</TableCell>
                   <TableCell align="left">{row.precio * row.cantidad}</TableCell>
+                  <TableCell align="left"><button>eliminar</button></TableCell>
                 </TableRow>
               ))}
               <TableRow>

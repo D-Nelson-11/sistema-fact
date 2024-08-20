@@ -41,7 +41,10 @@ const DropdownLink = styled(Link)`
   }
 `;
 
-const DropdownContainer = styled.div`
+const DropdownContainer = styled.div.attrs(({ isOpen }) => ({
+  // Aquí podemos evitar que `isOpen` se pase al DOM
+  isOpen: undefined,
+}))`
   max-height: ${({ isOpen }) => (isOpen ? '500px' : '0')};
   overflow: hidden;
   transition: max-height 0.5s ease;

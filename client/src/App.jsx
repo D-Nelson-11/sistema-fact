@@ -12,6 +12,7 @@ import SubMenu from "./components/Sidebar/SubMenu";
 import { IconContext } from "react-icons/lib";
 import { colors } from "./helpers/themes";
 import Factura from "./pages/Factura/Factura";
+import Parametros from "./pages/Parametros";
 
 const Nav = styled.div`
   background: ${colors.themeColor};
@@ -84,6 +85,8 @@ function App() {
             <Route path="/Inventario" element={<Inventario />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/factura" element={<Factura />} />
+            <Route path="/parametros" element={<Parametros />} />
+
           </Routes>
         </MainContent>
       </IconContext.Provider>

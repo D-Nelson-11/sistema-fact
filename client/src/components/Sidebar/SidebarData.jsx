@@ -42,7 +42,7 @@ export const SidebarData = [
   },
   {
     title: 'Parámetros',
-    path: '/team',
+    path: '/parametros',
     icon: <IoIcons.IoMdPeople />
   },
 ];
