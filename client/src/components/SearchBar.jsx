@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../public/SearchBar.module.css"; // Suponiendo que usas CSS Modules
+import { FaLongArrowAltRight } from "react-icons/fa";
 
 const SearchBar = ({ items, setRowsHelp }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
+  
+  useEffect(()=>{
+    console.log(items)
+  },[])
 
   const handleSearch = (event) => {
     const value = event.target.value.toLowerCase();
     setSearchTerm(value);
 
     const filtered = items.filter((item) =>
-      item.Nombre.toLowerCase().includes(value)
+      item.Descripcion.toLowerCase().includes(value)||
+      item.Codigo.toLowerCase().includes(value)
     );
     setFilteredItems(filtered);
   };
@@ -34,7 +40,7 @@ const SearchBar = ({ items, setRowsHelp }) => {
                 setRowsHelp(item);
                 setSearchTerm("")
               }}>
-              {item.Nombre}
+              {item.Descripcion} <br />Existencia <FaLongArrowAltRight style={{color:"black"}}/> <span style={{color:"green", fontWeight:"bold"}}>{item.Existencia}</span>
             </li>
           ))}
         </ul>

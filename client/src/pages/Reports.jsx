@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
+// import useScanDetection from 'use-scan-detection-react18';
 
-export const Reports = () => {
+function BarcodeScanner() {
+  const [value, setValue] = useState("");
+
+  // useScanDetection({
+  //     onComplete: (barcode) => {
+  //         setValue(barcode);
+  //         alert(barcode);
+  //     },
+  //     onError: console.error,
+  // });
+
   return (
-    <div className='reports'>
-      <h1>Reports</h1>
+    <div>
+      <input 
+          value={value} 
+          type="text"
+      />
     </div>
+      
   );
-};
+}
+
+export default BarcodeScanner;

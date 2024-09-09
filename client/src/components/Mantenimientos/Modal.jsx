@@ -2,23 +2,24 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import { colors } from "../../helpers/themes";
+import { useAppContext } from "../../context/AppContext";
 
 
-function ModalC({ContenidoModal,Nombre}) {
-    const [smShow, setSmShow] = useState(false);
+function ModalC({ContenidoModal,Nombre,row}) {
     const [lgShow, setLgShow] = useState(false);
+    const { handleClose } = useAppContext();
   
     return (
       <>
         <Button onClick={() => setLgShow(true)} style={{width:"200px", backgroundColor:colors.themeColor, border:"none"}}>{Nombre}</Button>
         <Modal
-          size="xl"
+          size="lg"
           show={lgShow}
           onHide={() => setLgShow(false)}
           aria-labelledby="example-modal-sizes-title-lg">
           <Modal.Header closeButton />
-          <Modal.Body className="d-flex justify-content-between" style={{height:"590px"}}>
-            {ContenidoModal}
+          <Modal.Body style={{height:"590px"}} className="d-flex justify-content-center">
+            <ContenidoModal row = {row ? row : null} />
           </Modal.Body>
         </Modal>
       </>

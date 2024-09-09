@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import "./public/App.css";
-import Inventario from "./pages/Inventario";
-import { Reports } from "./pages/Reports";
+import Inventario from "./pages/Inventario/Inventario";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
@@ -13,6 +12,8 @@ import { IconContext } from "react-icons/lib";
 import { colors } from "./helpers/themes";
 import Factura from "./pages/Factura/Factura";
 import Parametros from "./pages/Parametros";
+import BarcodeScanner from "./pages/Reports";
+import { ContextProvider } from "./context/AppContext";
 
 const Nav = styled.div`
   background: ${colors.themeColor};
@@ -63,7 +64,7 @@ function App() {
   const showSidebar = () => setSidebar(!sidebar);
 
   return (
-    <>
+    <ContextProvider>
       <IconContext.Provider value={{ color: "#fff" }}>
         <Nav>
           <NavIcon to="#" onClick={showSidebar}>
@@ -83,14 +84,12 @@ function App() {
         <MainContent sidebar={sidebar}>
           <Routes>
             <Route path="/Inventario" element={<Inventario />} />
-            <Route path="/reports" element={<Reports />} />
             <Route path="/factura" element={<Factura />} />
-            <Route path="/parametros" element={<Parametros />} />
-
+            <Route path="/parametros" element={<BarcodeScanner />} />
           </Routes>
         </MainContent>
       </IconContext.Provider>
-    </>
+    </ContextProvider>
   );
 }
 
