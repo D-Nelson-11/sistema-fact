@@ -1,10 +1,11 @@
 import { Form, Button } from "react-bootstrap";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
 import { useAppContext } from "../../context/AppContext";
+import { toast } from "sonner";
 
-export const Formulario = ({ row,closeModal }) => {
+export const Formulario = ({ row, closeModal }) => {
   const { register, handleSubmit, setValue } = useForm();
   const { setRows } = useAppContext();
 
@@ -12,7 +13,7 @@ export const Formulario = ({ row,closeModal }) => {
     if (row) {
       setValue("Codigo", row.Codigo);
       setValue("Descripcion", row.Descripcion);
-      setValue("Cantidad", row.Cantidad);
+      setValue("Cantidad", row.Existencia);
       setValue("Precio", row.Precio);
       console.log(row);
     } else {
@@ -20,20 +21,42 @@ export const Formulario = ({ row,closeModal }) => {
     }
   }, []);
   async function submit(values) {
-    try {
-      if (row) {
-        const response = await axios.put(`/UpdateInventario/${row.Id}`, values);
-        closeModal(false);
-
-        const newRows = await axios.get("/GetInventario");
-        setRows(newRows.data);
-      } else {
+    if (row) {
+        toast("¿Desea guardar los cambios?", {
+          action: {
+            label: "Guardar",
+            onClick: async () => {
+              try {
+                const response = await axios.put(`/UpdateInventario/${row.Id}`,values);
+                console.log(response)
+                if (response.data.IsValid === false) {
+                  return toast.error(response.data.message);
+                }
+                const newRows = await axios.get("/GetInventario");
+                toast.success(response.data.message);
+                closeModal(false);
+                setRows(newRows.data);
+              } catch (error) {
+                toast.error("Error al actualizar el registro", error);
+                console.error(error);
+              }
+            },
+          },
+        });
+     
+    } else {
+      try {
         const response = await axios.post("/AddInventario", values);
+        if (response.data.IsValid === false) {
+          return toast.error(response.data.message);
+        }
+        const newRows = await axios.get("/GetInventario");
+        toast.success("Registro agregado con éxito");
         closeModal(false);
+        setRows(newRows.data);
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      alert("Error al guardar");
-      console.error(error);
     }
   }
   return (

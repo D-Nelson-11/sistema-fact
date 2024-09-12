@@ -17,46 +17,37 @@ export const GetInventario = async (req, res) => {
     } catch (error) {
         res.json({ error: error });
     }
-}
-
-export const GetProductoById = async (req, res) => {
-    const { Codigo } = req.params;
-    const query = "SELECT * FROM inventario WHERE Codigo = ?";
-    try {
-        const result = await pool.query(query, [Codigo]);
-        res.json(result[0].map((item) => {
-            return {
-                Id: item.Id,
-                Cantidad: 1,
-                Precio: item.Precio,
-                Codigo: item.Codigo,
-                Descripcion: item.Descripcion
-            }
-        }));
-    } catch (error) {
-        res.json({ error: error });
-    }
-}
+};
 
 export const AddInventario = async (req, res) => {
     const { Cantidad, Precio, Codigo, Descripcion } = req.body;
     const query = "INSERT INTO inventario (Cantidad, Precio, Codigo, Descripcion) VALUES (?,?,?,?)";
+    const query2 = "SELECT * FROM inventario WHERE Codigo = ?";
     try {
-        const result = await pool.query(query, [Cantidad, Precio, Codigo, Descripcion]);
-        res.json({ message: "Inventario Agregado" });
+        const result1 = await pool.query(query2, [Codigo]);
+        if (result1[0].length > 0) {
+            return res.json({ IsValid: false, message: "El código del item ya existe" });
+        }
+        const result2 = await pool.query(query, [Cantidad, Precio, Codigo, Descripcion]);
+        res.json({ IsValid: true, message: "Registro Agregado" });
     } catch (error) {
         res.json({ error: error });
     }
 };
 
 export const UpdateInventario = async (req, res) => {
-    const { Cantidad, Precio, Codigo, Descripcion } = req.body;
+    const { Cantidad, Precio, Codigo, Descripcion,Id } = req.body;
     const { id } = req.params;
     const query = "UPDATE inventario SET Cantidad = ?, Precio = ?, Codigo = ?, Descripcion = ? WHERE id = ?";
+    const query2 = "SELECT * FROM inventario WHERE Codigo = ? AND id <> ?";
     try {
+        const result1 = await pool.query(query2, [Codigo, id]);
+        if (result1[0].length > 0) {
+            return res.json({ IsValid: false, message: "El código del item ya existe" });
+        }
         const result = await pool.query(query, [Cantidad, Precio, Codigo, Descripcion, id]);
         console.log(result);
-        res.json({ message: "Inventario Actualizado" });
+        res.json({ IsValid: true, message: "Registro Actualizado" });
     } catch (error) {
         res.json({ error: error });
     }
@@ -67,7 +58,7 @@ export const DeleteInventario = async (req, res) => {
     const query = "DELETE FROM inventario WHERE id = ?";
     try {
         const result = await pool.query(query, [id]);
-        res.json({ message: "Inventario Eliminado" });
+        res.json({ message: "Registro Eliminado" });
     } catch (error) {
         res.json({ error: error });
     }

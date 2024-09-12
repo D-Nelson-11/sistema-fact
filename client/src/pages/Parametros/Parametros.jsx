@@ -4,22 +4,20 @@ import { Formulario } from "./Form";
 import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import { useAppContext } from "../../context/AppContext";
-import { toast } from "sonner";
+
 const columnas = [
-  { id: "Codigo", label: "Código", minWidth: 170 },
-  { id: "Descripcion", label: "Nombre", minWidth: 100 },
-  { id: "Existencia", label: "Cantidad", minWidth: 100 },
-  { id: "Precio", label: "Precio", minWidth: 100 },
-  { id: "Acciones", label: "Acciones", minWidth: 100 },
+  { id: "Descripcion", label: "Descripcion", minWidth: 170 },
+  { id: "Valor", label: "Valor", minWidth: 100 },
 ];
 
-const Inventario = () => {
+const Parametros = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const {setRows,rows} = useAppContext();
 
   async function getData() {
     try {
-      const response = await axios.get("/GetInventario");
+      const response = await axios.get("/GetParametros");
+      console.log(response.data);
       setRows(response.data);
       console.log(response.data);
     } catch (error) {
@@ -28,7 +26,7 @@ const Inventario = () => {
   }
 
   useEffect(() => {
-    document.title = "Inventario";
+    document.title = "Parámetros";
     getData();
   }, []);
 
@@ -41,7 +39,7 @@ const Inventario = () => {
       let tabla = rows.filter((data) => {
         return data.IdActividadProduccion !== id;
       });
-      const resp = axios.delete(`/DeleteInventario/${id}`);
+      const resp = axios.delete(`/DeleteParametro/${id}`);
       setRows(tabla);
       toast.success("Registro eliminado con éxito");
     } catch (error) {
@@ -52,7 +50,7 @@ const Inventario = () => {
   const filteredData = rows.filter(
     (item) =>
       item.Descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.Codigo.toLowerCase().includes(searchTerm.toLowerCase())
+      item.Valor.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -71,4 +69,4 @@ const Inventario = () => {
   );
 };
 
-export default Inventario;
+export default Parametros;

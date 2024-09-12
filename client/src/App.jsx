@@ -11,9 +11,9 @@ import SubMenu from "./components/Sidebar/SubMenu";
 import { IconContext } from "react-icons/lib";
 import { colors } from "./helpers/themes";
 import Factura from "./pages/Factura/Factura";
-import Parametros from "./pages/Parametros";
-import BarcodeScanner from "./pages/Reports";
 import { ContextProvider } from "./context/AppContext";
+import { Toaster } from "sonner";
+import Parametros from "./pages/Parametros/Parametros";
 
 const Nav = styled.div`
   background: ${colors.themeColor};
@@ -33,7 +33,7 @@ const NavIcon = styled(Link)`
 `;
 
 const SidebarNav = styled.nav`
-  background:  ${colors.themeColor};
+  background: ${colors.themeColor};
   width: 250px;
   height: 100vh;
   display: flex;
@@ -85,10 +85,11 @@ function App() {
           <Routes>
             <Route path="/Inventario" element={<Inventario />} />
             <Route path="/factura" element={<Factura />} />
-            <Route path="/parametros" element={<BarcodeScanner />} />
+            <Route path="/parametros" element={<Parametros />} />
           </Routes>
         </MainContent>
       </IconContext.Provider>
+      <Toaster position="top-center" duration={4000} closeButton />
     </ContextProvider>
   );
 }
