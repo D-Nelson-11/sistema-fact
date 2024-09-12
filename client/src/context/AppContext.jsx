@@ -13,9 +13,10 @@ export const useAppContext = () => {
 export const ContextProvider = ({ children }) => {
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
+  const [rows, setRows] = useState([]);
 
   return (
-    <AppContext.Provider value={{ open, handleClose }}>
+    <AppContext.Provider value={{ open, handleClose, setRows,rows }}>
       {children}
     </AppContext.Provider>
   );

@@ -4,6 +4,7 @@ import ModalC from "../../components/Mantenimientos/Modal";
 import { Formulario } from "./Form";
 import { useEffect, useState } from "react";
 import axios from "../../api/axios";
+import { useAppContext } from "../../context/AppContext";
 
 const columnas = [
   { id: "Codigo", label: "Código", minWidth: 170 },
@@ -14,8 +15,8 @@ const columnas = [
 ];
 
 const Inventario = () => {
-  const [rows, setRows] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const {setRows,rows} = useAppContext();
 
   async function getData() {
     try {

@@ -2,9 +2,11 @@ import { Form, Button } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
+import { useAppContext } from "../../context/AppContext";
 
-export const Formulario = ({ row }) => {
+export const Formulario = ({ row,closeModal }) => {
   const { register, handleSubmit, setValue } = useForm();
+  const { setRows } = useAppContext();
 
   useEffect(() => {
     if (row) {
@@ -21,9 +23,13 @@ export const Formulario = ({ row }) => {
     try {
       if (row) {
         const response = await axios.put(`/UpdateInventario/${row.Id}`, values);
+        closeModal(false);
+
+        const newRows = await axios.get("/GetInventario");
+        setRows(newRows.data);
       } else {
         const response = await axios.post("/AddInventario", values);
-        console.log(response);
+        closeModal(false);
       }
     } catch (error) {
       alert("Error al guardar");

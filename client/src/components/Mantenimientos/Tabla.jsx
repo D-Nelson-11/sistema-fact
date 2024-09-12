@@ -16,7 +16,7 @@ export default function Tabla({
   formulario,
   searchTerm,
   handleSearchChange,
-  filteredData
+  filteredData,
 }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
