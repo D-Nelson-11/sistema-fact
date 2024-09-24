@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
 const SidebarLink = styled(Link)`
   display: flex;
@@ -45,14 +45,13 @@ const DropdownContainer = styled.div.attrs(({ isOpen }) => ({
   // Aquí podemos evitar que `isOpen` se pase al DOM
   isOpen: undefined,
 }))`
-  max-height: ${({ isOpen }) => (isOpen ? '500px' : '0')};
+  max-height: ${({ isOpen }) => (isOpen ? "500px" : "0")};
   overflow: hidden;
   transition: max-height 0.5s ease;
 `;
 
 const SubMenu = ({ item }) => {
   const [subnav, setSubnav] = useState(false);
-
   const showSubnav = () => setSubnav(!subnav);
 
   return (

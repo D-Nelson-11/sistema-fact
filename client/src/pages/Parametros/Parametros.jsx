@@ -8,11 +8,12 @@ import { useAppContext } from "../../context/AppContext";
 const columnas = [
   { id: "Descripcion", label: "Descripcion", minWidth: 170 },
   { id: "Valor", label: "Valor", minWidth: 100 },
+  { id: "Acciones", label: "Acciones", minWidth: 100 },
 ];
 
 const Parametros = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const {setRows,rows} = useAppContext();
+  const {setRows,rows,user} = useAppContext();
 
   async function getData() {
     try {
@@ -34,23 +35,10 @@ const Parametros = () => {
     setSearchTerm(event.target.value);
   };
 
-  const deleteRequest = async (id) => {
-    try {
-      let tabla = rows.filter((data) => {
-        return data.IdActividadProduccion !== id;
-      });
-      const resp = axios.delete(`/DeleteParametro/${id}`);
-      setRows(tabla);
-      toast.success("Registro eliminado con éxito");
-    } catch (error) {
-      toast.error(error.response.data);
-    }
-  };
-
   const filteredData = rows.filter(
     (item) =>
-      item.Descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.Valor.toLowerCase().includes(searchTerm.toLowerCase())
+      item.Descripcion?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.Valor?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -58,12 +46,12 @@ const Parametros = () => {
       <Tabla
         columns={columnas}
         rows={rows}
-        modalBtnValue="Agregar"
         formulario={Formulario}
         filteredData={filteredData}
-        deleteRequest={deleteRequest}
         handleSearchChange={handleSearchChange}
         searchTerm={searchTerm}
+        permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 1 && permiso.PermisoConsultar ==1)}
+        permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 1 && permiso.PermisoActualizar == 1)}
       />
     </div>
   );

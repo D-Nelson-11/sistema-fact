@@ -28,7 +28,6 @@ export const Formulario = ({ row, closeModal }) => {
             onClick: async () => {
               try {
                 const response = await axios.put(`/UpdateInventario/${row.Id}`,values);
-                console.log(response)
                 if (response.data.IsValid === false) {
                   return toast.error(response.data.message);
                 }
@@ -96,7 +95,7 @@ export const Formulario = ({ row, closeModal }) => {
         />
       </Form.Group>
       <Button variant="success" type="submit" className="w-100 mt-5">
-        {row ? "Editar" : "Guardar"}
+        Guardar
       </Button>
     </Form>
   );

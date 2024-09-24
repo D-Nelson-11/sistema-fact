@@ -15,7 +15,7 @@ export const GetInventario = async (req, res) => {
             }
         }));
     } catch (error) {
-        res.json({ error: error });
+        res.status(400).json({ error: error });
     }
 };
 
@@ -31,7 +31,7 @@ export const AddInventario = async (req, res) => {
         const result2 = await pool.query(query, [Cantidad, Precio, Codigo, Descripcion]);
         res.json({ IsValid: true, message: "Registro Agregado" });
     } catch (error) {
-        res.json({ error: error });
+        res.status(400).json({ error: error });
     }
 };
 
@@ -49,7 +49,7 @@ export const UpdateInventario = async (req, res) => {
         console.log(result);
         res.json({ IsValid: true, message: "Registro Actualizado" });
     } catch (error) {
-        res.json({ error: error });
+        res.status(400).json({ error: error });
     }
 }
 
@@ -58,9 +58,9 @@ export const DeleteInventario = async (req, res) => {
     const query = "DELETE FROM inventario WHERE id = ?";
     try {
         const result = await pool.query(query, [id]);
-        res.json({ message: "Registro Eliminado" });
+        res.json({ message: "Registro eliminado" });
     } catch (error) {
-        res.json({ error: error });
+        res.status(400).json({ error: error });
     }
 }
 

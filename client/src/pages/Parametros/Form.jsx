@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "../../api/axios";
 import { useAppContext } from "../../context/AppContext";
+import {toast} from 'sonner'
 
 export const Formulario = ({ row,closeModal }) => {
   const { register, handleSubmit, setValue } = useForm();
@@ -18,22 +19,43 @@ export const Formulario = ({ row,closeModal }) => {
     }
   }, []);
   async function submit(values) {
+    if (row) {
+      toast("¿Desea guardar los cambios?", {
+        action: {
+          label: "Guardar",
+          onClick: async () => {
+            try {
+              const response = await axios.put(`/UpdateParametro/${row.Id}`,values);
+              console.log(response)
+              if (response.data.IsValid === false) {
+                return toast.error(response.data.message);
+              }
+              const newRows = await axios.get("/GetParametros");
+              toast.success(response.data.message);
+              closeModal(false);
+              setRows(newRows.data);
+            } catch (error) {
+              toast.error("Error al actualizar el registro", error);
+              console.error(error);
+            }
+          },
+        },
+      });
+   
+  } else {
     try {
-      if (row) {
-        const response = await axios.put(`/UpdateParametro/${row.Id}`, values);
-        closeModal(false);
-
-        const newRows = await axios.get("/GetParametros");
-        setRows(newRows.data);
-      } else {
-        const response = await axios.post("/AddParametro", values);
-        console.log(response);
-        closeModal(false);
+      const response = await axios.post("/AddParametro", values);
+      if (response.data.IsValid === false) {
+        return toast.error(response.data.message);
       }
+      const newRows = await axios.get("/GetParametros");
+      toast.success("Registro agregado con éxito");
+      closeModal(false);
+      setRows(newRows.data);
     } catch (error) {
-      alert("Error al guardar");
       console.error(error);
     }
+  }
   }
   return (
     <Form className="h-75 w-75" onSubmit={handleSubmit(submit)}>

@@ -6,25 +6,25 @@ import * as RiIcons from 'react-icons/ri';
 import { MdOutlinePointOfSale } from "react-icons/md";
 
 export const SidebarData = [
-  {
-    title: 'Seguridad',
-    icon: <AiIcons.AiFillHome />,
-    iconClosed: <RiIcons.RiArrowDownSFill />,
-    iconOpened: <RiIcons.RiArrowUpSFill />,
+  // {
+  //   title: 'Seguridad',
+  //   icon: <AiIcons.AiFillHome />,
+  //   iconClosed: <RiIcons.RiArrowDownSFill />,
+  //   iconOpened: <RiIcons.RiArrowUpSFill />,
 
-    subNav: [
-      {
-        title: 'Usuarios',
-        path: '/overview/users',
-        icon: <IoIcons.IoIosPaper />
-      },
-      {
-        title: 'Roles',
-        path: '/overview/revenue',
-        icon: <IoIcons.IoIosPaper />
-      }
-    ]
-  },
+  //   subNav: [
+  //     {
+  //       title: 'Usuarios',
+  //       path: '/overview/users',
+  //       icon: <IoIcons.IoIosPaper />
+  //     },
+  //     {
+  //       title: 'Roles',
+  //       path: '/overview/revenue',
+  //       icon: <IoIcons.IoIosPaper />
+  //     }
+  //   ]
+  // },
   {
     title: 'Inventario',
     path: '/Inventario',
@@ -36,13 +36,18 @@ export const SidebarData = [
     icon: <MdOutlinePointOfSale />
   },
   {
-    title: 'Clientes',
-    path: '/team',
+    title: 'Parámetros',
+    path: '/parametros',
     icon: <IoIcons.IoMdPeople />
   },
   {
-    title: 'Parámetros',
-    path: '/parametros',
+    title: 'Roles',
+    path: '/Roles',
+    icon: <IoIcons.IoMdPeople />
+  },
+  {
+    title: 'Permisos',
+    path: '/Permisos',
     icon: <IoIcons.IoMdPeople />
   },
 ];

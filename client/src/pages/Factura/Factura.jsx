@@ -11,7 +11,6 @@ import { useState, useEffect } from "react";
 import SearchBar from "../../components/SearchBar";
 import axios from "../../api/axios";
 import { useRef } from "react";
-import PDF from "../../components/PDF";
 
 const TAX_RATE = 0.07;
 
@@ -153,7 +152,6 @@ export default function Factura() {
       style={{ width: "80%" }}>
         <SearchBar items={items} setRowsHelp={AñadirProducto} />    
       <div style={{ width: "70%" }}>
-        <button onClick={()=>{PDF(rows)}}>factura</button>
         <TableContainer
           component={Paper}
           sx={{ width: "100%", height: "auto", maxHeight: "500px" }}>
@@ -235,7 +233,7 @@ export default function Factura() {
           </Table>
         </TableContainer>
       </div>
-      <Datos />
+      <Datos rows={rows} />
     </div>
   );
 }

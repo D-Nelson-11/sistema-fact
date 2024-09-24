@@ -5,29 +5,29 @@ import { useEffect, useState } from "react";
 import axios from "../../api/axios";
 import { useAppContext } from "../../context/AppContext";
 import { toast } from "sonner";
+import { set } from "react-hook-form";
 const columnas = [
-  { id: "Codigo", label: "Código", minWidth: 170 },
-  { id: "Descripcion", label: "Nombre", minWidth: 100 },
-  { id: "Existencia", label: "Cantidad", minWidth: 100 },
-  { id: "Precio", label: "Precio", minWidth: 100 },
+  { id: "Rol", label: "Rol", minWidth: 170 },
+  { id: "Descripcion", label: "Descripcion", minWidth: 100 },
   { id: "Acciones", label: "Acciones", minWidth: 100 },
 ];
 
-const Inventario = () => {
+const Rol = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const {setRows,rows,user} = useAppContext();
 
   async function getData() {
     try {
-      const response = await axios.get("/GetInventario");
+      const response = await axios.get("/getRoles");
       setRows(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   }
 
   useEffect(() => {
-    document.title = "Inventario";
+    document.title = "Roles";
     getData();
   }, []);
 
@@ -37,21 +37,23 @@ const Inventario = () => {
 
   const deleteRequest = async (id) => {
     try {
+      
+      const resp =  await axios.delete(`/DeleteRol/${id}`);
       let tabla = rows.filter((data) => {
         return data.Id !== id;
       });
-      const resp =  await axios.delete(`/DeleteInventario/${id}`);
       setRows(tabla);
       toast.success(resp.data.message);
     } catch (error) {
-      toast.error(error.response.data);
+      toast.error("Este rol puede ser eliminado porque alguien lo tiene asignado");
+      // toast.error(error.response.data);
     }
   };
 
   const filteredData = rows?.filter(
     (item) =>
       item.Descripcion?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.Codigo?.toLowerCase().includes(searchTerm.toLowerCase())
+      item.Rol?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -64,13 +66,14 @@ const Inventario = () => {
         deleteRequest={deleteRequest}
         handleSearchChange={handleSearchChange}
         searchTerm={searchTerm}
-        modalBtnValue={user[1]?.some((permiso)=> permiso.IdObjeto == 2 && permiso.PermisoInsercion == 1) ? "Nuevo" : null}
-        permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 2 && permiso.PermisoConsultar ==1)}
-        permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 2 && permiso.PermisoActualizar == 1)}
-        permisoEliminar={user[1]?.some((permiso)=> permiso.IdObjeto == 2 && permiso.PermisoEliminar == 1)}
+        modalBtnValue={user[1]?.some((permiso)=> permiso.IdObjeto == 4 && permiso.PermisoInsercion == 1) ? "Nuevo" : null}
+        permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 4 && permiso.PermisoConsultar ==1)}
+        permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 4 && permiso.PermisoActualizar == 1)}
+        permisoEliminar={user[1]?.some((permiso)=> permiso.IdObjeto == 4 && permiso.PermisoEliminar == 1)}
+
       />
     </div>
   );
 };
 
-export default Inventario;
+export default Rol;
