@@ -36,16 +36,16 @@ export const AddInventario = async (req, res) => {
 };
 
 export const UpdateInventario = async (req, res) => {
-    const { Cantidad, Precio, Codigo, Descripcion,Id } = req.body;
+    const { Cantidad, Precio, Codigo, Descripcion,NuevasUnidades } = req.body;
     const { id } = req.params;
-    const query = "UPDATE inventario SET Cantidad = ?, Precio = ?, Codigo = ?, Descripcion = ? WHERE id = ?";
+    const query = "UPDATE inventario SET Cantidad = Cantidad + ?, Precio = ?, Codigo = ?, Descripcion = ? WHERE id = ?";
     const query2 = "SELECT * FROM inventario WHERE Codigo = ? AND id <> ?";
     try {
         const result1 = await pool.query(query2, [Codigo, id]);
         if (result1[0].length > 0) {
             return res.json({ IsValid: false, message: "El código del item ya existe" });
         }
-        const result = await pool.query(query, [Cantidad, Precio, Codigo, Descripcion, id]);
+        const result = await pool.query(query, [NuevasUnidades, Precio, Codigo, Descripcion, id]);
         console.log(result);
         res.json({ IsValid: true, message: "Registro Actualizado" });
     } catch (error) {

@@ -8,7 +8,7 @@ import { useAppContext } from "../../context/AppContext";
 const columnas = [
   { id: "Rol", label: "Rol", minWidth: 170 },
   { id: "Objeto", label: "Pantalla", minWidth: 100 },
-  { id: "PermisoInsercion", label: "Insercion", minWidth: 100 },
+  { id: "PermisoInsercion", label: "Ingresar", minWidth: 100 },
   { id: "PermisoActualizar", label: "Actualizar", minWidth: 100 },
   { id: "PermisoEliminar", label: "Eliminar", minWidth: 100 },
   { id: "PermisoConsultar", label: "Consultar", minWidth: 100 },

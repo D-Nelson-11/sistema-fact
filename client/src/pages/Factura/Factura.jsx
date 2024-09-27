@@ -11,8 +11,9 @@ import { useState, useEffect } from "react";
 import SearchBar from "../../components/SearchBar";
 import axios from "../../api/axios";
 import { useRef } from "react";
-
-const TAX_RATE = 0.07;
+import { toast } from "sonner";
+import { TfiReload } from "react-icons/tfi";
+import { set } from "react-hook-form";
 
 export default function Factura() {
   const [editable, setEditable] = useState(null); // Estado para rastrear qué fila se está editando
@@ -20,14 +21,23 @@ export default function Factura() {
   const [items, setItems] = useState([]);
   const [subTotal, setSubTotal] = useState(calculateSubtotal(rows));
   const lastInputTime = useRef(Date.now());
-  const inputSequence = useRef('');
+  const inputSequence = useRef("");
+  const [parametros, setParametros] = useState([]);
+  const [valorDescuento, setValorDescuento] = useState(0);
+  const [editable2, setEditable2] = useState(null); // Estado para rastrear qué fila se está editando
 
   useEffect(() => {
-    async function GetInventario() {
-      const response = await axios.get("/GetInventario");
-      setItems(response.data);
+    async function GetData() {
+      try {
+        const response = await axios.get("/GetInventario");
+        setItems(response.data);
+        const resp = await axios.get("/GetParametros");
+        setParametros(resp.data);
+      } catch (error) {
+        console.log("Error al obtener los datos:", error);
+      }
     }
-    GetInventario();
+    GetData();
 
     const handleKeyDown = (event) => {
       const currentTime = Date.now();
@@ -38,7 +48,10 @@ export default function Factura() {
 
       if (timeDiff < SCAN_THRESHOLD) {
         inputSequence.current += event.key;
-      } else if (timeDiff < SEQUENCE_THRESHOLD && inputSequence.current.length > 0) {
+      } else if (
+        timeDiff < SEQUENCE_THRESHOLD &&
+        inputSequence.current.length > 0
+      ) {
         inputSequence.current += event.key;
       } else {
         inputSequence.current = event.key;
@@ -47,74 +60,78 @@ export default function Factura() {
       lastInputTime.current = currentTime;
     };
 
-     const handleKeyPress = (event) => {
-      if (event.key === 'Enter') {
+    const handleKeyPress = (event) => {
+      if (event.key === "Enter") {
         let scannedValue = inputSequence.current;
 
         // Eliminar la palabra "Enter" si está al final
-        if (scannedValue.endsWith('Enter')) {
+        if (scannedValue.endsWith("Enter")) {
           scannedValue = scannedValue.slice(0, -5);
         }
 
         handleScannedValue(scannedValue.trim()); // Limpiar espacios innecesarios
-        inputSequence.current = ''; // Limpiar la secuencia después de procesarla
+        inputSequence.current = ""; // Limpiar la secuencia después de procesarla
       }
     };
-      // Escuchar los eventos de teclado a nivel global
-      window.addEventListener('keydown', handleKeyDown);
-      window.addEventListener('keypress', handleKeyPress);
-  
-      return () => {
-        // Limpiar los eventos al desmontar el componente
-        window.removeEventListener('keydown', handleKeyDown);
-        window.removeEventListener('keypress', handleKeyPress);
-      };
+    // Escuchar los eventos de teclado a nivel global
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keypress", handleKeyPress);
+
+    return () => {
+      // Limpiar los eventos al desmontar el componente
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keypress", handleKeyPress);
+    };
   }, []);
 
   const handleScannedValue = async (value) => {
     try {
       const response = await axios.get(`/GetInventarioById/${value}`);
-      console.log('vine');
-      
+
       if (response.data.length > 0) {
         const newItem = response.data[0];
         setRows((prevRows) => {
           // Verificar si el código ya existe en prevRows
-          const isDuplicate = prevRows.some(item => item.Codigo === newItem.Codigo);
-          
+          const isDuplicate = prevRows.some(
+            (item) => item.Codigo === newItem.Codigo
+          );
+
           if (!isDuplicate) {
             const newRows = [...prevRows, newItem];
             setSubTotal(calculateSubtotal(newRows)); // Recalcular el subtotal
             return newRows;
           } else {
-            console.log('El producto ya existe:', newItem.Codigo);
+            console.log("El producto ya existe:", newItem.Codigo);
             return prevRows; // Retorna el estado previo sin cambios
           }
         });
       } else {
-        console.log('Producto no encontrado:', value);
-        alert('Producto no encontrado');
+        console.log("Producto no encontrado:", value);
+        alert("Producto no encontrado");
       }
     } catch (error) {
-      console.error('Error al obtener el producto:', error);
+      console.error("Error al obtener el producto:", error);
     }
   };
   const handleDoubleClick = (index) => {
     setEditable(index); // Establecer la fila que se está editando
   };
+  const handleDoubleClickDesc = () => {
+    setEditable2(true); // Establecer la fila que se está editando
+  };
 
   const AñadirProducto = (value) => {
     setRows((prevRows) => {
-      console.log(prevRows)
+      console.log(prevRows);
       // Verificar si el código ya existe en prevRows
-      const isDuplicate = prevRows.some(item => value.Codigo === item.Codigo);
-      
+      const isDuplicate = prevRows.some((item) => value.Codigo === item.Codigo);
+
       if (!isDuplicate) {
         const newRows = [...prevRows, value];
         setSubTotal(calculateSubtotal(newRows)); // Recalcular el subtotal
         return newRows;
       } else {
-        console.log('El producto ya existe:', value.Codigo);
+        console.log("El producto ya existe:", value.Codigo);
         return prevRows; // Retorna el estado previo sin cambios
       }
     });
@@ -131,8 +148,33 @@ export default function Factura() {
 
   const handleCantidadChange = (index, value) => {
     const updatedRows = [...rows];
+    if (value > updatedRows[index].Existencia) {
+      toast.error("La cantidad no puede ser mayor a la existencia");
+      return;
+    }
+    if (value == '') {
+      updatedRows[index].Cantidad = 1;
+      setRows(updatedRows);
+      return;
+    }
     updatedRows[index].Cantidad = parseInt(value);
     setRows(updatedRows);
+    setSubTotal(calculateSubtotal(updatedRows)); // Recalcular el subtotal
+  };
+  const handleCantidadChangeDesc = (value) => {
+    if (value > Number(parametros[1].Valor)) {
+      toast.error("El descuento no puede ser mayor al permitido");
+      setValorDescuento(0);
+      return;
+    }
+    if (value < 0) {
+      toast.error("El descuento no puede ser menor a 0");
+      setValorDescuento(0);
+      return;
+    }
+    setValorDescuento(value);
+    const updatedRows = [...rows];
+
     setSubTotal(calculateSubtotal(updatedRows)); // Recalcular el subtotal
   };
 
@@ -142,7 +184,7 @@ export default function Factura() {
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      setEditable(null);
+      setEditable2(null);
     }
   };
 
@@ -150,7 +192,29 @@ export default function Factura() {
     <div
       className="center d-flex h-auto justify-content-between flex-wrap"
       style={{ width: "80%" }}>
-        <SearchBar items={items} setRowsHelp={AñadirProducto} />    
+      <div style={{width:"90%"}}>
+        <SearchBar items={items} setRowsHelp={AñadirProducto} />
+      </div>
+      <div style={{width:"10%"}} className="d-flex align-items-center justify-content-end">
+        <TfiReload style={{color:"black", fontSize:"32px", cursor:"pointer"}} onClick={()=>{
+          toast("¿Desea actualizar la página?",{
+            action:{
+              label:"Actualizar",
+              onClick:async()=>{
+                try {
+                  const response = await axios.get("/GetInventario");
+                  setItems(response.data);
+                  const resp = await axios.get("/GetParametros");
+                  setParametros(resp.data);
+                  toast.success("Página actualizada");
+                } catch (error) {
+                  console.log("Error al obtener los datos:", error);
+                }
+              }
+            }
+          })
+        }} />
+      </div>
       <div style={{ width: "70%" }}>
         <TableContainer
           component={Paper}
@@ -159,8 +223,7 @@ export default function Factura() {
             sx={{ minWidth: 600 }}
             aria-label="spanning table"
             stickyHeader
-            id="tabla"
-            >
+            id="tabla">
             <TableHead>
               <TableRow>
                 <TableCell align="left">Nombre</TableCell>
@@ -180,6 +243,7 @@ export default function Factura() {
                     {editable === index ? (
                       <input
                         type="number"
+                        min={1}
                         style={{ width: "60px" }}
                         value={row.Cantidad}
                         onChange={(e) =>
@@ -195,7 +259,7 @@ export default function Factura() {
                   </TableCell>
                   <TableCell align="left">{row.Precio}</TableCell>
                   <TableCell align="left">
-                    {row.Precio * row.Cantidad}
+                    {(row.Precio * row.Cantidad).toFixed(2)}
                   </TableCell>
                   <TableCell align="left">
                     <button
@@ -210,30 +274,77 @@ export default function Factura() {
               <TableRow>
                 <TableCell rowSpan={3} />
                 <TableCell colSpan={2}>Subtotal</TableCell>
-                <TableCell align="left">{subTotal}</TableCell>
+                <TableCell align="left">{subTotal.toFixed(2)}</TableCell>
               </TableRow>
-              <TableRow>
-                <TableCell>Impuesto</TableCell>
-                <TableCell align="left">{`${(TAX_RATE * 100).toFixed(
-                  0
-                )} %`}</TableCell>
-                <TableCell align="left">
-                  {(subTotal * TAX_RATE).toFixed(2)}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell colSpan={2} sx={{ fontSize: "30px" }}>
-                  Total
-                </TableCell>
-                <TableCell align="left" sx={{ fontSize: "30px" }}>
-                {(subTotal * (1 + TAX_RATE)).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </TableCell>
-              </TableRow>
+              {parametros.length > 0 && (
+                <>
+                  <TableRow>
+                    <TableCell>Impuesto</TableCell>
+                    <TableCell align="left">{`${parametros[4].Valor} %`}</TableCell>
+                    <TableCell align="left">
+                      {((subTotal * parametros[4].Valor) / 100).toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Descuento</TableCell>
+                    <TableCell
+                      align="left"
+                      onDoubleClick={() => handleDoubleClickDesc()}>
+                      {editable2 == true ? (
+                        <input
+                          type="number"
+                          style={{ width: "60px" }}
+                          value={valorDescuento}
+                          max={Number(parametros[1].Valor)}
+                          min={0}
+                          onChange={(e) =>
+                            handleCantidadChangeDesc(e.target.value)
+                          }
+                          onBlur={() => setEditable2(null)} // Salir del modo de edición cuando se pierde el foco
+                          autoFocus
+                          onKeyDown={handleKeyDown}
+                        />
+                      ) : (
+                        valorDescuento + " " + "%"
+                      )}
+                    </TableCell>
+                    <TableCell align="left">
+                      {((subTotal * valorDescuento) / 100).toFixed(2)}
+                    </TableCell>
+                  </TableRow>
+                </>
+              )}
+
+              {parametros.length > 0 && (
+                <>
+                  <TableRow>
+                    <TableCell></TableCell>
+
+                    <TableCell
+                      colSpan={2}
+                      sx={{ fontSize: "30px" }}
+                      align="left">
+                      Total
+                    </TableCell>
+
+                    <TableCell align="left" sx={{ fontSize: "30px" }}>
+                      {(
+                        subTotal -
+                        (subTotal * valorDescuento) / 100 +
+                        (parametros[4].Valor / 100) * subTotal
+                      ).toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </TableCell>
+                  </TableRow>
+                </>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </div>
-      <Datos rows={rows} />
+      <Datos rows={rows} setItems={setItems} setParametros={setParametros} />
     </div>
   );
 }

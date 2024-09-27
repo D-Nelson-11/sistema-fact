@@ -4,6 +4,9 @@ import * as AiIcons from 'react-icons/ai';
 import * as IoIcons from 'react-icons/io';
 import * as RiIcons from 'react-icons/ri';
 import { MdOutlinePointOfSale } from "react-icons/md";
+import { GrConfigure } from "react-icons/gr";
+import { FaUsersGear } from "react-icons/fa6";
+import { GiSecurityGate } from "react-icons/gi";
 
 export const SidebarData = [
   // {
@@ -38,16 +41,16 @@ export const SidebarData = [
   {
     title: 'Parámetros',
     path: '/parametros',
-    icon: <IoIcons.IoMdPeople />
+    icon: <GrConfigure />
   },
   {
     title: 'Roles',
     path: '/Roles',
-    icon: <IoIcons.IoMdPeople />
+    icon: <FaUsersGear />
   },
   {
     title: 'Permisos',
     path: '/Permisos',
-    icon: <IoIcons.IoMdPeople />
+    icon: <GiSecurityGate />
   },
 ];
