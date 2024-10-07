@@ -78,8 +78,8 @@ const Permisos = () => {
         filteredData={filteredData}
         handleSearchChange={handleSearchChange}
         searchTerm={searchTerm}
-        permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 5 && permiso.PermisoConsultar ==1)}
-        permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 5 && permiso.PermisoActualizar == 1)}
+        permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 4 && permiso.PermisoConsultar ==1)}
+        permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 4 && permiso.PermisoActualizar == 1)}
       />
     </div>
   );

@@ -18,6 +18,7 @@ import { ProtectedRoutes } from "./ProtectedRoutes";
 import { useAppContext } from "./context/AppContext";
 import Rol from "./pages/Rol/Rol";
 import Permisos from "./pages/Permisos/Permisos";
+import Usuarios from "./pages/Usuarios/Usuario";
 const Nav = styled.div`
   background: ${colors.themeColor};
   height: 50px;
@@ -65,7 +66,11 @@ function App() {
   const [sidebar, setSidebar] = useState(false);
   const location = useLocation();
   const showSidebar = () => setSidebar(!sidebar);
-  const {logout} = useAppContext();
+  const { logout, user } = useAppContext();
+
+  useEffect(() => {
+    console.log(user);
+  }, []);
 
   return (
     <>
@@ -80,7 +85,12 @@ function App() {
               <FaIcons.FaBars fontSize={"25px"} />
             </NavIcon>
             <div className="me-5">
-              <Link onClick={()=>{logout()}}>Cerrar Sesión</Link>
+              <Link
+                onClick={() => {
+                  logout();
+                }}>
+                Cerrar Sesión
+              </Link>
             </div>
           </Nav>
           <SidebarNav sidebar={sidebar}>
@@ -88,7 +98,11 @@ function App() {
               <NavIcon to="#" onClick={showSidebar}>
                 <AiIcons.AiOutlineClose fontSize={"25px"} />
               </NavIcon>
-              {SidebarData.map((item, index) => {
+              {SidebarData.filter(
+                (item) =>
+                  user &&
+                  user[1]?.some((permiso) => permiso.IdObjeto === item.IdObjeto)
+              ).map((item, index) => {
                 return <SubMenu item={item} key={index} />;
               })}
             </SidebarWrap>
@@ -101,13 +115,19 @@ function App() {
                 <Route path="/parametros" element={<Parametros />} />
                 <Route path="/Roles" element={<Rol />} />
                 <Route path="/Permisos" element={<Permisos />} />
+                <Route path="/Usuarios" element={<Usuarios />} />
+
               </Route>
             </Routes>
           </MainContent>
         </IconContext.Provider>
       )}
 
-      <Toaster position="top-center" duration={4000} closeButton />
+      <Toaster position="top-center" duration={4000} closeButton toastOptions={{
+        style:{
+          fontSize:"15px",
+        }
+      }}/>
     </>
   );
 }

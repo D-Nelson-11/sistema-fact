@@ -7,6 +7,7 @@ import { MdOutlinePointOfSale } from "react-icons/md";
 import { GrConfigure } from "react-icons/gr";
 import { FaUsersGear } from "react-icons/fa6";
 import { GiSecurityGate } from "react-icons/gi";
+import axios from '../../api/axios';
 
 export const SidebarData = [
   // {
@@ -31,26 +32,41 @@ export const SidebarData = [
   {
     title: 'Inventario',
     path: '/Inventario',
-    icon: <FaIcons.FaCartPlus />
+    icon: <FaIcons.FaCartPlus />,
+    IdObjeto: 2
   },
   {
     title: 'Factura',
     path: '/factura',
-    icon: <MdOutlinePointOfSale />
+    icon: <MdOutlinePointOfSale />,
+    IdObjeto: 3
+
   },
   {
     title: 'Parámetros',
     path: '/parametros',
-    icon: <GrConfigure />
-  },
-  {
-    title: 'Roles',
-    path: '/Roles',
-    icon: <FaUsersGear />
+    icon: <GrConfigure />,
+    IdObjeto: 1
+
   },
   {
     title: 'Permisos',
     path: '/Permisos',
-    icon: <GiSecurityGate />
+    icon: <GiSecurityGate />,
+    IdObjeto: 4
+  },
+  {
+    title: 'Roles',
+    path: '/Roles',
+    icon: <FaUsersGear />,
+    IdObjeto: 5
+
+  },
+  {
+    title: 'Usuarios',
+    path: '/Usuarios',
+    icon: <FaUsersGear />,
+    IdObjeto: 6
+
   },
 ];

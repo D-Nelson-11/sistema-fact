@@ -34,6 +34,7 @@ export const ContextProvider = ({ children }) => {
       try {
         const res = await axios.get("/verifyToken");
         if (!res.data) {
+          console.log("No hay token");
           setIsAuthenticated(false);
           setLoading(false);
           setUser(null);
@@ -43,7 +44,6 @@ export const ContextProvider = ({ children }) => {
         setIsAuthenticated(true);
         setLoading(false);
         setUser(res.data);
-        console.log(isAuthenticated);
       } catch (error) {
         setIsAuthenticated(false);
         setLoading(false);

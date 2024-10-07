@@ -149,10 +149,18 @@ export default function Factura() {
   const handleCantidadChange = (index, value) => {
     const updatedRows = [...rows];
     if (value > updatedRows[index].Existencia) {
-      toast.error("La cantidad no puede ser mayor a la existencia");
+      toast.error("La cantidad no puede ser mayor a la existencia", {
+        style: {
+          fontSize: "20px",
+          backgroundColor: "#C70039",
+          width: "400px",
+          color: "#fff",
+          border: "none",
+        },
+      });
       return;
     }
-    if (value == '') {
+    if (value == "") {
       updatedRows[index].Cantidad = 1;
       setRows(updatedRows);
       return;
@@ -163,12 +171,28 @@ export default function Factura() {
   };
   const handleCantidadChangeDesc = (value) => {
     if (value > Number(parametros[1].Valor)) {
-      toast.error("El descuento no puede ser mayor al permitido");
+      toast.error("El descuento no puede ser mayor al permitido", {
+        style: {
+          fontSize: "20px",
+          backgroundColor: "#C70039",
+          width: "400px",
+          color: "#fff",
+          border: "none",
+        },
+      });
       setValorDescuento(0);
       return;
     }
     if (value < 0) {
-      toast.error("El descuento no puede ser menor a 0");
+      toast.error("El descuento no puede ser menor a 0", {
+        style: {
+          fontSize: "20px",
+          backgroundColor: "#C70039",
+          width: "400px",
+          color: "#fff",
+          border: "none",
+        },
+      });
       setValorDescuento(0);
       return;
     }
@@ -192,28 +216,47 @@ export default function Factura() {
     <div
       className="center d-flex h-auto justify-content-between flex-wrap"
       style={{ width: "80%" }}>
-      <div style={{width:"90%"}}>
+      <div style={{ width: "90%" }}>
         <SearchBar items={items} setRowsHelp={AñadirProducto} />
       </div>
-      <div style={{width:"10%"}} className="d-flex align-items-center justify-content-end">
-        <TfiReload style={{color:"black", fontSize:"32px", cursor:"pointer"}} onClick={()=>{
-          toast("¿Desea actualizar la página?",{
-            action:{
-              label:"Actualizar",
-              onClick:async()=>{
-                try {
-                  const response = await axios.get("/GetInventario");
-                  setItems(response.data);
-                  const resp = await axios.get("/GetParametros");
-                  setParametros(resp.data);
-                  toast.success("Página actualizada");
-                } catch (error) {
-                  console.log("Error al obtener los datos:", error);
-                }
-              }
-            }
-          })
-        }} />
+      <div
+        style={{ width: "10%" }}
+        className="d-flex align-items-center justify-content-end">
+        <TfiReload
+          style={{ color: "black", fontSize: "32px", cursor: "pointer" }}
+          onClick={() => {
+            toast("¿Desea actualizar la página?", {
+              action: {
+                label: "Actualizar",
+                onClick: async () => {
+                  try {
+                    const response = await axios.get("/GetInventario");
+                    setItems(response.data);
+                    console.log(response.data);
+                    if (rows.length > 0) {
+                      console.log(rows);
+                      rows.forEach((row) => {
+                        response.data.forEach((item) => {
+                          if (item.Codigo === row.Codigo) {
+                            console.log(item.Existencia);
+                            console.log(row.Existencia);
+                            // console.log('actualice a ', item.Existencia)
+                            row.Existencia = item.Existencia;
+                          }
+                        });
+                      });
+                    }
+                    const resp = await axios.get("/GetParametros");
+                    setParametros(resp.data);
+                    toast.success("Página actualizada");
+                  } catch (error) {
+                    console.log("Error al obtener los datos:", error);
+                  }
+                },
+              },
+            });
+          }}
+        />
       </div>
       <div style={{ width: "70%" }}>
         <TableContainer
