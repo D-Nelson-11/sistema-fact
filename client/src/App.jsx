@@ -19,6 +19,7 @@ import { useAppContext } from "./context/AppContext";
 import Rol from "./pages/Rol/Rol";
 import Permisos from "./pages/Permisos/Permisos";
 import Usuarios from "./pages/Usuarios/Usuario";
+import Bitacora from "./pages/Bitacora/Bitacora";
 const Nav = styled.div`
   background: ${colors.themeColor};
   height: 50px;
@@ -116,6 +117,9 @@ function App() {
                 <Route path="/Roles" element={<Rol />} />
                 <Route path="/Permisos" element={<Permisos />} />
                 <Route path="/Usuarios" element={<Usuarios />} />
+                <Route path="/Bitacora" element={<Bitacora />} />
+
+                
 
               </Route>
             </Routes>

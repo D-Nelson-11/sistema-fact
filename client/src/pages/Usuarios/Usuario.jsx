@@ -6,10 +6,10 @@ import axios from "../../api/axios";
 import { useAppContext } from "../../context/AppContext";
 import { toast } from "sonner";
 const columnas = [
-  { id: "Codigo", label: "Código", minWidth: 170 },
-  { id: "Descripcion", label: "Nombre", minWidth: 100 },
-  { id: "Existencia", label: "Cantidad", minWidth: 100 },
-  { id: "Precio", label: "Precio", minWidth: 100 },
+  { id: "Nombre", label: "Nombre", minWidth: 100 },
+  { id: "Correo", label: "Correo", minWidth: 100 },
+  { id: "Estado", label: "Estado", minWidth: 100 },
+  { id: "Rol", label: "Rol", minWidth: 100 },
   { id: "Acciones", label: "Acciones", minWidth: 100 },
 ];
 
@@ -19,15 +19,16 @@ const Usuarios = () => {
 
   async function getData() {
     try {
-      const response = await axios.get("/GetInventario");
+      const response = await axios.get("/getUsuarios");
       setRows(response.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
   }
 
   useEffect(() => {
-    document.title = "Inventario";
+    document.title = "Usuarios";
     getData();
   }, []);
 
@@ -40,7 +41,7 @@ const Usuarios = () => {
       let tabla = rows.filter((data) => {
         return data.Id !== id;
       });
-      const resp =  await axios.delete(`/DeleteInventario/${id}`);
+      const resp =  await axios.delete(`/deleteUsuario/${id}`);
       setRows(tabla);
       toast.success(resp.data.message);
     } catch (error) {
@@ -50,8 +51,10 @@ const Usuarios = () => {
 
   const filteredData = rows?.filter(
     (item) =>
-      item.Descripcion?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.Codigo?.toLowerCase().includes(searchTerm.toLowerCase())
+      item.Nombre?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.Correo?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.Estado?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.Rol?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -64,10 +67,10 @@ const Usuarios = () => {
         deleteRequest={deleteRequest}
         handleSearchChange={handleSearchChange}
         searchTerm={searchTerm}
-        modalBtnValue={user[1]?.some((permiso)=> permiso.IdObjeto == 2 && permiso.PermisoInsercion == 1) ? "Nuevo" : null}
-        permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 2 && permiso.PermisoConsultar ==1)}
-        permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 2 && permiso.PermisoActualizar == 1)}
-        permisoEliminar={user[1]?.some((permiso)=> permiso.IdObjeto == 2 && permiso.PermisoEliminar == 1)}
+        modalBtnValue={user[1]?.some((permiso)=> permiso.IdObjeto == 6 && permiso.PermisoInsercion == 1) ? "Nuevo" : null}
+        permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 6 && permiso.PermisoConsultar ==1)}
+        permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 6 && permiso.PermisoActualizar == 1)}
+        permisoEliminar={user[1]?.some((permiso)=> permiso.IdObjeto == 6 && permiso.PermisoEliminar == 1)}
       />
     </div>
   );

@@ -7,6 +7,7 @@ import Roles from './routes/Rol.routes.js'
 import auth from './routes/Auth.routes.js'
 import Objetos from './routes/Objetos.routes.js'
 import Permisos from './routes/Permisos.routes.js'
+import Usuarios from './routes/Usuario.routes.js'
 
 import cookie from 'cookie-parser'
 const app = express();
@@ -25,6 +26,7 @@ app.use('/api', Parametros);
 app.use('/api', Roles);
 app.use('/api', Objetos);
 app.use('/api', Permisos);
+app.use('/api', Usuarios);
 app.use('/api', auth);
 
 

@@ -1,7 +1,7 @@
 import { pool } from "../database/connection.js";
 
 export const getPermisos = async (req, res) => {
-    const query = "SELECT R.Id, OB.Id as IdObjeto, R.Rol, OB.Objeto, PR.PermisoInsercion,PR.PermisoActualizar,PR.PermisoEliminar,PR.PermisoConsultar FROM Permisos PR INNER JOIN Objetos OB ON OB.Id = PR.IdObjeto INNER JOIN Rol R ON R.Id = PR.IdRol ORDER BY R.ROL ASC;";
+    const query = "SELECT R.Id, OB.Id as IdObjeto, R.Rol, OB.Objeto, PR.PermisoInsercion,PR.PermisoActualizar,PR.PermisoEliminar,PR.PermisoConsultar FROM Permisos PR INNER JOIN Objetos OB ON OB.Id = PR.IdObjeto INNER JOIN Rol R ON R.Id = PR.IdRol WHERE R.Id <> 1 ORDER BY R.ROL ASC ;";
 
     try {
         const result = await pool.query(query);

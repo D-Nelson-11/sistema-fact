@@ -102,7 +102,8 @@ export default function Tabla({
                                 {deleteRequest && permisoEliminar && (
                                   <button
                                     className="btn btn-danger ms-1"
-                                    onClick={() =>
+                                    onClick={() =>{
+                                      toast.dismiss();
                                       toast.error(
                                         "¿Desea eliminar este registro?",
                                         {
@@ -116,7 +117,7 @@ export default function Tabla({
                                           },
                                         }
                                       )
-                                    }>
+                                    }}>
                                     Eliminar
                                   </button>
                                 )}

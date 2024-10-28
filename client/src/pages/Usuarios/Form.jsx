@@ -1,25 +1,35 @@
 import { Form, Button, Row, Col } from "react-bootstrap";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { set, useForm } from "react-hook-form";
 import axios from "../../api/axios";
 import { useAppContext } from "../../context/AppContext";
 import { toast } from "sonner";
 
 export const Formulario = ({ row, closeModal }) => {
   const { register, handleSubmit, setValue } = useForm();
-  const { setRows } = useAppContext();
+  const { setRows, user } = useAppContext();
+  const [roles, setRoles] = useState([]);
+  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar contraseña
+
+  useEffect(() => {
+    async function getRoles() {
+      const response = await axios.get("/getRoles");
+      setRoles(response.data);
+    }
+    getRoles();
+    console.log(user);
+  }, []);
 
   useEffect(() => {
     if (row) {
-      setValue("Codigo", row.Codigo);
-      setValue("Descripcion", row.Descripcion);
-      setValue("Cantidad", row.Existencia);
-      setValue("Precio", row.Precio);
-      console.log(row);
-    } else {
-      console.log("No hay datos");
+      setValue("Nombres", row.Nombres);
+      setValue("Apellidos", row.Apellidos);
+      setValue("Correo", row.Correo);
+      setValue("IdRol", row.IdRol);
+      setValue("Estado", row.Estado === "Activo" ? "1" : "0");
     }
-  }, []);
+  }, [roles]);
+
   async function submit(values) {
     if (row) {
       toast("¿Desea guardar los cambios?", {
@@ -28,13 +38,13 @@ export const Formulario = ({ row, closeModal }) => {
           onClick: async () => {
             try {
               const response = await axios.put(
-                `/UpdateInventario/${row.Id}`,
+                `/updateUsuario/${row.Id}`,
                 values
               );
               if (response.data.IsValid === false) {
                 return toast.error(response.data.message);
               }
-              const newRows = await axios.get("/GetInventario");
+              const newRows = await axios.get("/getUsuarios");
               toast.success(response.data.message);
               closeModal(false);
               setRows(newRows.data);
@@ -47,11 +57,14 @@ export const Formulario = ({ row, closeModal }) => {
       });
     } else {
       try {
-        const response = await axios.post("/AddInventario", values);
+        const response = await axios.post("/guardarUsuario", {
+          ...values,
+          Estado: 1,
+        });
         if (response.data.IsValid === false) {
           return toast.error(response.data.message);
         }
-        const newRows = await axios.get("/GetInventario");
+        const newRows = await axios.get("/getUsuarios");
         toast.success("Registro agregado con éxito");
         closeModal(false);
         setRows(newRows.data);
@@ -60,84 +73,106 @@ export const Formulario = ({ row, closeModal }) => {
       }
     }
   }
+
   return (
     <Form className="h-75 w-75" onSubmit={handleSubmit(submit)}>
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label>Código</Form.Label>
+            <Form.Label>Nombres</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Código"
+              placeholder="Nombres"
               autoFocus
-              {...register("Codigo", { required: true })}
+              {...register("Nombres", { required: true })}
             />
           </Form.Group>
         </Col>
-      </Row>
-      <Row>
         <Col>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
-            <Form.Label>Descripción</Form.Label>
+            <Form.Label>Apellidos</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Descripcion"
-              {...register("Descripcion", { required: true })}
+              placeholder="Apellidos"
+              {...register("Apellidos", { required: true })}
             />
           </Form.Group>
         </Col>
       </Row>
-
       <Row>
         <Col>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
-            <Form.Label>Existencia</Form.Label>
+            <Form.Label>Correo</Form.Label>
             <Form.Control
-              type="number"
-              readOnly = {row ? true : false}
-              placeholder="Existencia"
-              {...register("Cantidad", { required: true })}
+              type="email"
+              readOnly={row ? true : false}
+              placeholder="Correo"
+              {...register("Correo", { required: true })}
             />
           </Form.Group>
         </Col>
+        <Col>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput4">
+            <Form.Label>Rol</Form.Label>
+            <Form.Select {...register("IdRol", { required: true })}>
+              <option value="">Seleccione</option>
+              {roles.map((rol) => (
+                <option key={rol.Id} value={rol.Id}>
+                  {rol.Rol}
+                </option>
+              ))}
+            </Form.Select>
+          </Form.Group>
+        </Col>
+      </Row>
+      <Row>
+        {!row && (
+          <Col>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput5">
+              <Form.Label>Contraseña</Form.Label>
+              <Form.Control
+                type={showPassword ? "text" : "password"} // Mostrar como texto o contraseña
+                placeholder="Contraseña"
+                {...register("userPassword", { required: !row })} // La contraseña solo es obligatoria si no hay datos previos
+              />
+            </Form.Group>
+            <Form.Check
+              type="checkbox"
+              id="showPasswordCheck" // Agrega un id al checkbox
+              label={
+                <Form.Label controlId="showPasswordCheck">
+                  Mostrar contraseña
+                </Form.Label>
+              } // El label apunta al id del checkbox
+              onChange={(e) => setShowPassword(e.target.checked)}
+            />
+          </Col>
+        )}
         {row && (
           <Col>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput3">
-              <Form.Label>Añadir Unidades</Form.Label>
-              <Form.Control
-                type="number"
-                placeholder="Añadir Unidades"
-                defaultValue={0}
-                {...register("NuevasUnidades", { required: true })}
-                onChange={(e) => {
-                  if (e.target.value === "") {
-                    return setValue("Cantidad", row.Existencia);
-                  }
-                  setValue(
-                    "Cantidad",
-                    parseInt(e.target.value) + parseInt(row.Existencia)
-                  );
-                }}
-                min={0}
-              />
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput4">
+              <Form.Label>Estado</Form.Label>
+              <Form.Select {...register("Estado", { required: true })}>
+                <option value="">Seleccione</option>
+                <option value="1">Activo</option>
+                <option value="0">Inactivo</option>
+              </Form.Select>
             </Form.Group>
           </Col>
         )}
+        {row && user[0][0].Id == 1 ? (
+          <Col>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput5">
+              <Form.Label>Contraseña</Form.Label>
+              <Form.Control
+                type="text" // Mostrar como texto o contraseña
+                placeholder="Contraseña"
+                {...register("userPassword", { required: !row })} // La contraseña solo es obligatoria si no hay datos previos
+              />
+            </Form.Group>
+          </Col>
+        ) : null}
       </Row>
-
-      <Row>
-        <Col>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput4">
-            <Form.Label>Precio</Form.Label>
-            <Form.Control
-              type="number"
-              placeholder="Precio"
-              {...register("Precio", { required: true })}
-            />
-          </Form.Group>
-        </Col>
-      </Row>
-
       <Button variant="success" type="submit" className="w-100 mt-5">
         Guardar
       </Button>

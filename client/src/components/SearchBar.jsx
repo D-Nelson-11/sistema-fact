@@ -31,8 +31,8 @@ const SearchBar = ({ items, setRowsHelp }) => {
 
     const filtered = items.filter(
       (item) =>
-        item.Descripcion.toLowerCase().includes(value) ||
-        item.Codigo.toLowerCase().includes(value)
+        item.Descripcion?.toLowerCase().includes(value) ||
+        item.Codigo?.toLowerCase().includes(value)
     );
     setFilteredItems(filtered);
   };

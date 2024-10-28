@@ -7,6 +7,8 @@ import { MdOutlinePointOfSale } from "react-icons/md";
 import { GrConfigure } from "react-icons/gr";
 import { FaUsersGear } from "react-icons/fa6";
 import { GiSecurityGate } from "react-icons/gi";
+import { FaUsers } from "react-icons/fa6";
+import { BsFillClipboardDataFill } from "react-icons/bs";
 import axios from '../../api/axios';
 
 export const SidebarData = [
@@ -65,7 +67,14 @@ export const SidebarData = [
   {
     title: 'Usuarios',
     path: '/Usuarios',
-    icon: <FaUsersGear />,
+    icon: <FaUsers />,
+    IdObjeto: 6
+
+  },
+  {
+    title: 'Bitacora',
+    path: '/Bitacora',
+    icon: <BsFillClipboardDataFill />,
     IdObjeto: 6
 
   },

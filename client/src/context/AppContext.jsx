@@ -2,6 +2,7 @@ import { useContext, createContext, useState, useEffect } from "react";
 import Cookie from "js-cookie";
 import axios from '../api/axios';
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export const AppContext = createContext();
 
@@ -57,11 +58,13 @@ export const ContextProvider = ({ children }) => {
   const login = async (body) => {
     try {
       const res = await axios.post(`/login`, body);
-      console.log(res.data);
       setUser(res.data);
       setIsAuthenticated(true);
       navigate("/Inventario");
+      toast.dismiss();
     } catch (error) {
+      toast.dismiss();
+      toast.error(error.response.data.message);
       console.log(error);
     }
   };
@@ -72,6 +75,7 @@ export const ContextProvider = ({ children }) => {
       setIsAuthenticated(false);
       setUser(null);
       setLoading(false);
+      toast.dismiss();
     } catch (error) {
       console.log(error);
     }

@@ -149,6 +149,7 @@ export default function Factura() {
   const handleCantidadChange = (index, value) => {
     const updatedRows = [...rows];
     if (value > updatedRows[index].Existencia) {
+      toast.dismiss();
       toast.error("La cantidad no puede ser mayor a la existencia", {
         style: {
           fontSize: "20px",
@@ -225,6 +226,7 @@ export default function Factura() {
         <TfiReload
           style={{ color: "black", fontSize: "32px", cursor: "pointer" }}
           onClick={() => {
+            toast.dismiss();
             toast("¿Desea actualizar la página?", {
               action: {
                 label: "Actualizar",
@@ -232,15 +234,11 @@ export default function Factura() {
                   try {
                     const response = await axios.get("/GetInventario");
                     setItems(response.data);
-                    console.log(response.data);
                     if (rows.length > 0) {
                       console.log(rows);
                       rows.forEach((row) => {
                         response.data.forEach((item) => {
                           if (item.Codigo === row.Codigo) {
-                            console.log(item.Existencia);
-                            console.log(row.Existencia);
-                            // console.log('actualice a ', item.Existencia)
                             row.Existencia = item.Existencia;
                           }
                         });
@@ -387,7 +385,18 @@ export default function Factura() {
           </Table>
         </TableContainer>
       </div>
-      <Datos rows={rows} setItems={setItems} setParametros={setParametros} />
+      {parametros.length > 0 && (
+        <Datos
+          rows={rows}
+          setItems={setItems}
+          setParametros={setParametros}
+          total={
+            subTotal -
+            (subTotal * valorDescuento) / 100 +
+            (parametros[4].Valor / 100) * subTotal
+          }
+        />
+      )}
     </div>
   );
 }

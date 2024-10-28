@@ -12,7 +12,7 @@ export const register = async (req, res) => {
             UserPassword,
             Correo,
             IdRol,
-            Apellidos
+            Apellidos,
         }
         newUser.UserPassword = await cryptPassword(UserPassword);
         await pool.query('insert into Usuario set ?', [newUser])
@@ -36,6 +36,8 @@ export const login = async (req, res) => {
 
         const validPassword = await matchPassword(UserPassword, user[0].userPassword);
         if (!validPassword) return res.status(400).json({ message: "Usuario o contraseña incorrecta" });
+
+        if (user[0].Estado === 0) return res.status(400).json({ message: "Usuario inactivo" });
 
         const token = await createAccessToken({ Id: user[0].Id })
         const [permisos] = await pool.query('select * from Permisos where IdRol = ?', [user[0].IdRol]);
