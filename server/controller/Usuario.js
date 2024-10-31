@@ -24,7 +24,7 @@ export const getUsuarios = async (req, res) => {
 }
 
 export const guardarUsuario = async (req, res) => {
-    const query = "INSERT INTO Usuario (Nombres,Apellidos,userPassword,Correo,IdRol,Estado) VALUES (UPPER(?),UPPER(?),?,UPPER(?),?,?)";
+    const query = "INSERT INTO Usuario (Nombres,Apellidos,userPassword,Correo,IdRol) VALUES (UPPER(?),UPPER(?),?,UPPER(?),?)";
     const query2 = "SELECT * FROM Usuario Where Correo = ?";
     const { Nombres, Apellidos, userPassword, Correo, IdRol, Estado } = req.body;
     try {

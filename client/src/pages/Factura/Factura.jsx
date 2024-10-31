@@ -218,6 +218,9 @@ export default function Factura() {
       className="center d-flex h-auto justify-content-between flex-wrap"
       style={{ width: "80%" }}>
       <div style={{ width: "90%" }}>
+        <div>
+          <h2>Facturar</h2>
+        </div>
         <SearchBar items={items} setRowsHelp={AñadirProducto} />
       </div>
       <div
@@ -298,9 +301,15 @@ export default function Factura() {
                       row.Cantidad
                     )}
                   </TableCell>
-                  <TableCell align="left">{row.Precio}</TableCell>
+                  <TableCell align="left">{row.Precio.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}</TableCell>
                   <TableCell align="left">
-                    {(row.Precio * row.Cantidad).toFixed(2)}
+                    {(row.Precio * row.Cantidad).toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                   </TableCell>
                   <TableCell align="left">
                     <button
@@ -315,7 +324,10 @@ export default function Factura() {
               <TableRow>
                 <TableCell rowSpan={3} />
                 <TableCell colSpan={2}>Subtotal</TableCell>
-                <TableCell align="left">{subTotal.toFixed(2)}</TableCell>
+                <TableCell align="left">{subTotal.toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}</TableCell>
               </TableRow>
               {parametros.length > 0 && (
                 <>

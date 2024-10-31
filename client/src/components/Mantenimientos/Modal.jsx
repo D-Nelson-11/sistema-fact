@@ -19,6 +19,7 @@ function ModalC({ ContenidoModal, Nombre, row, ancho }) {
         onHide={() => setLgShow(false)}
         aria-labelledby="example-modal-sizes-title-lg"
         dialogClassName="modal-90w"
+        centered
       >
         <Modal.Header closeButton />
         <Modal.Body style={{ height: "auto" }} className="d-flex justify-content-center">

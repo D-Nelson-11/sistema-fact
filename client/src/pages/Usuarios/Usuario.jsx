@@ -67,6 +67,7 @@ const Usuarios = () => {
         deleteRequest={deleteRequest}
         handleSearchChange={handleSearchChange}
         searchTerm={searchTerm}
+        titulo={"Usuarios"}
         modalBtnValue={user[1]?.some((permiso)=> permiso.IdObjeto == 6 && permiso.PermisoInsercion == 1) ? "Nuevo" : null}
         permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 6 && permiso.PermisoConsultar ==1)}
         permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 6 && permiso.PermisoActualizar == 1)}

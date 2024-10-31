@@ -66,6 +66,7 @@ const Rol = () => {
         deleteRequest={deleteRequest}
         handleSearchChange={handleSearchChange}
         searchTerm={searchTerm}
+        titulo = {"Roles"}
         modalBtnValue={user[1]?.some((permiso)=> permiso.IdObjeto == 5 && permiso.PermisoInsercion == 1) ? "Nuevo" : null}
         permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 5 && permiso.PermisoConsultar ==1)}
         permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 5 && permiso.PermisoActualizar == 1)}

@@ -78,6 +78,7 @@ const Permisos = () => {
         filteredData={filteredData}
         handleSearchChange={handleSearchChange}
         searchTerm={searchTerm}
+        titulo={"Permisos"}
         permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 4 && permiso.PermisoConsultar ==1)}
         permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 4 && permiso.PermisoActualizar == 1)}
       />

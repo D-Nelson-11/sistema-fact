@@ -22,6 +22,7 @@ export default function Tabla({
   permisoEliminar,
   permisoConsulta,
   permisoActualizar,
+  titulo,
 }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -37,6 +38,9 @@ export default function Tabla({
 
   return (
     <div>
+      <div>
+        <h2>{titulo}</h2>
+      </div>
       <div className="d-flex flex-column flex-md-row justify-content-between">
         {modalBtnValue && (
           <div

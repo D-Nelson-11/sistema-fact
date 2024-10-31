@@ -64,6 +64,7 @@ const Inventario = () => {
         deleteRequest={deleteRequest}
         handleSearchChange={handleSearchChange}
         searchTerm={searchTerm}
+        titulo={"Inventario"}
         modalBtnValue={user[1]?.some((permiso)=> permiso.IdObjeto == 2 && permiso.PermisoInsercion == 1) ? "Nuevo" : null}
         permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 2 && permiso.PermisoConsultar ==1)}
         permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 2 && permiso.PermisoActualizar == 1)}

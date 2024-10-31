@@ -54,9 +54,8 @@ const Bitacora = () => {
       <Tabla
         columns={columnas}
         rows={rows}
-        // formulario={Formulario}
+        titulo={"Bitácora"}
         filteredData={filteredData}
-        // deleteRequest={deleteRequest}
         handleSearchChange={handleSearchChange}
         searchTerm={searchTerm}
       />
