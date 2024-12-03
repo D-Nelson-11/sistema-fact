@@ -1,0 +1,47 @@
+/* Index.module.css */
+
+/* Fondo con degradado azul y rojo */
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1a73e8, #d32f2f);
+  }
+  
+  /* Estilo del formulario */
+  .form {
+    width: 100%;
+    max-width: 400px;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Título del formulario */
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #1a73e8;
+  }
+  
+  
+  /* Botón de enviar */
+  .button {
+    background-color: #1a73e8; /* Azul */
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    padding: 0.75rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Hover del botón */
+  .button:hover {
+    background-color: #d32f2f; /* Rojo */
+  }
+  

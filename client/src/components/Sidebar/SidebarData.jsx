@@ -75,7 +75,7 @@ export const SidebarData = [
     title: 'Bitacora',
     path: '/Bitacora',
     icon: <BsFillClipboardDataFill />,
-    IdObjeto: 6
+    IdObjeto: 7
 
   },
 ];

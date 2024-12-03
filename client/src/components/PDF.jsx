@@ -59,7 +59,9 @@ async function PDF(rows,values,total,metodoPago) {
   // Información del cliente
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
+  doc.setFont("helvetica", "bold");
   doc.text("Datos del Cliente:", 15, 40);
+  doc.setFont("helvetica", "normal");
   doc.text(`Nombre: ${clienteInfo.nombre}`, 15, 45);
   doc.text(`Rtn: ${clienteInfo.Rtn}`, 15, 50);
 
@@ -70,14 +72,21 @@ async function PDF(rows,values,total,metodoPago) {
   autoTable(doc, {
     html: "#tabla",
     didParseCell: (HookData) => {
-      if (HookData.column.dataKey == 4) {
+      // Ocultar el texto de la columna 4
+      if (HookData.column.dataKey === 4) {
         HookData.cell.text[0] = "";
       }
     },
     theme: "striped",
     startY: startY, // Empieza la tabla justo después del contenido previo
+    headStyles: {
+      fillColor: [0, 0, 0], // Negro (RGB: 0, 0, 0)
+      textColor: [255, 255, 255], // Texto blanco (opcional para mejor visibilidad)
+    },
+    bodyStyles:{
+      textColor:[0,0,0]
+    }
   });
-
   // Añadir contenido adicional después de la tabla
     doc.setFont("helvetica", "normal");
     doc.setFontSize(12);
@@ -101,7 +110,10 @@ async function PDF(rows,values,total,metodoPago) {
     doc.setFont("helvetica", "bold");
     doc.text(`total pagado:`, 15, 240);
     doc.setFont("helvetica", "normal");
-    doc.text(`${total} lps`, 33, 240);
+    doc.text(`${total.toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })} lps`, 33, 240);
 
 
 
@@ -141,7 +153,12 @@ async function PDF(rows,values,total,metodoPago) {
   }
 
   // Guardar el PDF
-  doc.save("factura_estilizada_con_logo.pdf");
+  // // doc.save("factura_estilizada_con_logo.pdf");
+  // doc.autoPrint();
+  // window.open(doc.output("bloburl","_blank"))
+  const pdfUrl = doc.output("bloburl");
+  window.open(pdfUrl);
+  
 }
 
 export default PDF;

@@ -41,7 +41,6 @@ export const ContextProvider = ({ children }) => {
           setUser(null);
           return;
         }
-
         setIsAuthenticated(true);
         setLoading(false);
         setUser(res.data);
@@ -58,6 +57,7 @@ export const ContextProvider = ({ children }) => {
   const login = async (body) => {
     try {
       const res = await axios.post(`/login`, body);
+      console.log(res);
       setUser(res.data);
       setIsAuthenticated(true);
       navigate("/Inventario");

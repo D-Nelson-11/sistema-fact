@@ -216,10 +216,19 @@ export default function Factura() {
   return (
     <div
       className="center d-flex h-auto justify-content-between flex-wrap"
-      style={{ width: "80%" }}>
+      style={{ width: "90%" }}>
       <div style={{ width: "90%" }}>
         <div>
-          <h2>Facturar</h2>
+          <h2  style={{
+            fontFamily: "Arial, sans-serif",
+            fontWeight: "bolder",
+            background: "linear-gradient(45deg, #1d54ae 30%, #df4e47 90%)",
+            padding: "30px",
+            color: "#fff",
+            borderRadius: "5px",
+            fontSize:"34px",
+            letterSpacing:"4px"
+          }}>Facturar</h2>
         </div>
         <SearchBar items={items} setRowsHelp={AñadirProducto} />
       </div>
@@ -335,7 +344,10 @@ export default function Factura() {
                     <TableCell>Impuesto</TableCell>
                     <TableCell align="left">{`${parametros[4].Valor} %`}</TableCell>
                     <TableCell align="left">
-                      {((subTotal * parametros[4].Valor) / 100).toFixed(2)}
+                      {((subTotal * parametros[4].Valor) / 100).toLocaleString("en-US", {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -375,12 +387,14 @@ export default function Factura() {
 
                     <TableCell
                       colSpan={2}
-                      sx={{ fontSize: "30px" }}
-                      align="left">
-                      Total
+                      sx={{ fontSize: "80px", fontWeight:"bolder"  }}
+                      align="left"
+                      >
+                      Total:
+              
                     </TableCell>
 
-                    <TableCell align="left" sx={{ fontSize: "30px" }}>
+                    <TableCell align="left" sx={{ fontSize: "60px" }}>
                       {(
                         subTotal -
                         (subTotal * valorDescuento) / 100 +
@@ -407,6 +421,7 @@ export default function Factura() {
             (subTotal * valorDescuento) / 100 +
             (parametros[4].Valor / 100) * subTotal
           }
+          setRows={setRows}
         />
       )}
     </div>

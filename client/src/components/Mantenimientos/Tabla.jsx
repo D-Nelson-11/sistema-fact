@@ -39,7 +39,19 @@ export default function Tabla({
   return (
     <div>
       <div>
-        <h2>{titulo}</h2>
+        <h1
+          style={{
+            fontFamily: "Arial, sans-serif",
+            fontWeight: "bolder",
+            background: "linear-gradient(45deg, #1d54ae 30%, #df4e47 90%)",
+            padding: "30px",
+            color: "#fff",
+            borderRadius: "5px",
+            fontSize:"34px",
+            letterSpacing:"4px"
+          }}>
+          {titulo}
+        </h1>
       </div>
       <div className="d-flex flex-column flex-md-row justify-content-between">
         {modalBtnValue && (
@@ -50,6 +62,7 @@ export default function Tabla({
               Nombre={modalBtnValue}
               ContenidoModal={formulario}
               ancho="200px"
+              titulo={titulo}
             />
           </div>
         )}
@@ -101,12 +114,13 @@ export default function Tabla({
                                     Nombre="Editar"
                                     ContenidoModal={formulario}
                                     row={row}
+                                    titulo={titulo}
                                   />
                                 )}
                                 {deleteRequest && permisoEliminar && (
                                   <button
                                     className="btn btn-danger ms-1"
-                                    onClick={() =>{
+                                    onClick={() => {
                                       toast.dismiss();
                                       toast.error(
                                         "¿Desea eliminar este registro?",
@@ -120,13 +134,15 @@ export default function Tabla({
                                             },
                                           },
                                         }
-                                      )
+                                      );
                                     }}>
                                     Eliminar
                                   </button>
                                 )}
                               </>
                             )}
+                            {column.id === "N" && <span>{index + 1}</span>}
+                           
                           </TableCell>
                         );
                       })}
@@ -141,10 +157,15 @@ export default function Tabla({
           component="div"
           count={rows?.length}
           rowsPerPage={rowsPerPage}
-          labelRowsPerPage="Filas por página"
+          labelRowsPerPage="ITEMS EN PANTALLA"
+          labelDisplayedRows={({ from, to, count }) =>{
+            return `${from}-${to} de ${count !== -1 ? count : `mas de ${to}`}`
+          }
+        }
           page={page}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{ background:"linear-gradient(45deg, #df4e47 10%, #1d54ae 60%)", color: "#fff" }}
         />
       </Paper>
     </div>

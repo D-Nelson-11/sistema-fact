@@ -21,7 +21,7 @@ export const GetInventario = async (req, res) => {
 
 export const AddInventario = async (req, res) => {
     const { Cantidad, Precio, Codigo, Descripcion } = req.body;
-    const query = "INSERT INTO inventario (Cantidad, Precio, Codigo, Descripcion) VALUES (?,?,?,?)";
+    const query = "INSERT INTO inventario (Cantidad, Precio, Codigo, Descripcion) VALUES (?,?,?,upper(?))";
     const query2 = "SELECT * FROM inventario WHERE Codigo = ?";
     try {
         const result1 = await pool.query(query2, [Codigo]);

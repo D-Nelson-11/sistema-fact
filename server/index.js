@@ -13,7 +13,7 @@ import cookie from 'cookie-parser'
 const app = express();
 
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: ['http://localhost:5173'],
     credentials: true,
 }))
 
@@ -30,6 +30,7 @@ app.use('/api', Usuarios);
 app.use('/api', auth);
 
 
-
-
-app.listen(4000);
+const port = 4000; // O el puerto que prefieras
+app.listen(port, '0.0.0.0', () => {
+  console.log(`Server running on http://0.0.0.0:${port}`);
+});

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { set, useForm } from "react-hook-form";
 import PDF from "../../components/PDF";
 import { toast } from "sonner";
 import axios from "../../api/axios";
@@ -10,50 +10,52 @@ const labelStyles = {
   fontSize: "13px",
 };
 
-function Datos({ rows, setItems, setParametros, total }) {
+function Datos({ rows, setItems, setParametros, total, setRows }) {
   const { register, handleSubmit, watch, getValues } = useForm();
   const [paymentMethod, setPaymentMethod] = useState("Tarjeta");
   const isCash = paymentMethod === "Efectivo";
   const monto = watch("Monto", 0);
   const { user } = useAppContext();
 
-  function generarFactura(values,total,metodoPago) {
+  function generarFactura(values, total, metodoPago) {
     toast.dismiss();
     console.log(values);
     toast("¿Desea generar la factura?", {
       action: {
         label: "Generar",
         onClick: async () => {
-            const resp = await axios.put("/generarFactura", {
-              rows: rows,
-            });
-            if (resp.data.IsValid) {
-              try {
-                const response = await axios.get("/GetInventario");
-                setItems(response.data);
-                const resp2 = await axios.get("/GetParametros");
-                setParametros(resp2.data);
-                PDF(rows, values, total,metodoPago);
-                let accion = `${user[0][0].Nombres} generó una factura, Productos Vendidos: ${rows.map((item) => `${item.Descripcion} Cant: ${item.Cantidad}`)} total: ${total}`;
-                axios.post("/insertBitacora",{Accion: accion});
-                toast.success("Factura generada con éxito");
-              } catch (error) {
-                toast.error("Ha ocurrido un error");
-              }
-            } else {
-              toast.error(resp.data.message);
+          const resp = await axios.put("/generarFactura", {
+            rows: rows,
+          });
+          if (resp.data.IsValid) {
+            try {
+              const response = await axios.get("/GetInventario");
+              setItems(response.data);
+              const resp2 = await axios.get("/GetParametros");
+              setParametros(resp2.data);
+              PDF(rows, values, total, metodoPago);
+              let accion = `${
+                user[0][0].Nombres
+              } generó una factura, Productos Vendidos: ${rows.map(
+                (item) => `${item.Descripcion} Cant: ${item.Cantidad}`
+              )} total: ${total}`;
+              axios.post("/insertBitacora", { Accion: accion });
+              toast.success("Factura generada con éxito");
+            } catch (error) {
+              toast.error("Ha ocurrido un error");
             }
+          } else {
+            toast.error(resp.data.message);
+          }
         },
       },
     });
-    
   }
 
   return (
     <div
       style={{ width: "29.5%", backgroundColor: "#fff", height: "450px" }}
-      className="p-2 rounded-1"
-    >
+      className="p-2 rounded-1">
       <Form>
         <Row>
           <Col>
@@ -67,6 +69,8 @@ function Datos({ rows, setItems, setParametros, total }) {
               />
             </Form.Group>
           </Col>
+        </Row>
+        <Row>
           <Col>
             <Form.Group className="mb-3">
               <Form.Label style={labelStyles}>Rtn</Form.Label>
@@ -132,8 +136,9 @@ function Datos({ rows, setItems, setParametros, total }) {
               backgroundColor: "#0a0a2a",
               border: "none",
             }}
-            onClick={()=>{generarFactura(getValues(),total,paymentMethod)}}
-          >
+            onClick={() => {
+              generarFactura(getValues(), total, paymentMethod);
+            }}>
             Factura
           </Button>
           <Button
@@ -141,8 +146,7 @@ function Datos({ rows, setItems, setParametros, total }) {
               width: "49.5%",
               backgroundColor: "#a4a4a4",
               border: "none",
-            }}
-          >
+            }}>
             Cotización
           </Button>
         </Form.Group>

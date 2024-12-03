@@ -130,7 +130,7 @@ export const Formulario = ({ row, closeModal }) => {
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput4">
             <Form.Label>Precio</Form.Label>
             <Form.Control
-              type="number"
+              type="float"
               placeholder="Precio"
               {...register("Precio", { required: true })}
             />
@@ -138,7 +138,7 @@ export const Formulario = ({ row, closeModal }) => {
         </Col>
       </Row>
 
-      <Button variant="success" type="submit" className="w-100 mt-5">
+      <Button variant="danger" type="submit" className="w-100 mt-5">
         Guardar
       </Button>
     </Form>

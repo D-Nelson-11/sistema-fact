@@ -2,20 +2,23 @@ import React, { useState } from "react";
 import { Form, Button, Container } from "react-bootstrap";
 import { useAppContext } from "./context/AppContext";
 import { useForm } from "react-hook-form";
+import styles from "./public/login.module.css";
 
 function Index() {
   const { login } = useAppContext();
   const { register, handleSubmit } = useForm();
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar contraseña
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <Container className="d-flex justify-content-center p-3 mt-4">
+    <Container className={styles.container} fluid>
       <Form
-        className="bg-light p-3 border border-1 rounded mt-4"
-        style={{ width: "35%" }}
+        className={styles.form}
         onSubmit={handleSubmit((values) => {
           login(values);
-        })}>
+        })}
+      >
+        <div className={styles.title}>Iniciar Sesión</div>
+
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Correo</Form.Label>
           <Form.Control
@@ -28,21 +31,22 @@ function Index() {
         <Form.Group className="mb-3" controlId="formBasicPassword">
           <Form.Label>Contraseña</Form.Label>
           <Form.Control
-            type={showPassword ? "text" : "password"} // Controla el tipo según el estado
+            type={showPassword ? "text" : "password"}
             placeholder="Contraseña"
             {...register("UserPassword", { required: true })}
           />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+        <Form.Group className="mb-3">
           <Form.Check
             type="checkbox"
             label="Mostrar Contraseña"
-            onChange={(e) => setShowPassword(e.target.checked)} // Actualiza el estado al hacer clic en el checkbox
+            className={styles.checkbox}
+            onChange={(e) => setShowPassword(e.target.checked)}
           />
         </Form.Group>
 
-        <Button variant="success" type="submit" className="w-100">
+        <Button type="submit" className={`${styles.button} w-100`}>
           Iniciar Sesión
         </Button>
       </Form>

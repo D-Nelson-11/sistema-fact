@@ -58,7 +58,7 @@ const Usuarios = () => {
   );
 
   return (
-    <div className="center w-75">
+    <div style={{width:"90%", margin:'auto'}}>
       <Tabla
         columns={columnas}
         rows={rows}

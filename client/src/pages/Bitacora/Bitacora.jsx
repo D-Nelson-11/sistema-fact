@@ -6,6 +6,8 @@ import { useAppContext } from "../../context/AppContext";
 import { toast } from "sonner";
 const columnas = [
   { id: "Accion", label: "Nombre", minWidth: 100 },
+  { id: "Fecha", label: "Fecha", minWidth: 100 },
+
 ];
 
 const Bitacora = () => {
@@ -15,7 +17,7 @@ const Bitacora = () => {
   async function getData() {
     try {
       const response = await axios.get("/getBitacora");
-      setRows(response.data);
+      setRows(response.data.map((item) => ({ ...item, Fecha: new Date(item.Fecha).toLocaleString() })));    
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -50,7 +52,7 @@ const Bitacora = () => {
   );
 
   return (
-    <div className="center w-75">
+    <div style={{width:"90%", margin:'auto'}}>
       <Tabla
         columns={columnas}
         rows={rows}

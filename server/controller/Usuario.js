@@ -80,7 +80,7 @@ export const updateUsuario = async (req, res) => {
 
 export const insertBitacora = async (req, res) => {
     const { Accion } = req.body; // values es un array que contiene los productos a insertar en la bitácora y el total
-    const query = "INSERT INTO Bitacora (Accion) VALUES (?)";
+    const query = "INSERT INTO Bitacora (Accion, Fecha) VALUES (?, Now())";
     try {
         await pool.query(query, [Accion]);
         res.json({ IsValid: true, message: "Registro guardado con éxito" });
@@ -91,7 +91,7 @@ export const insertBitacora = async (req, res) => {
 }
 
 export const getBitacora = async (req, res) => {
-    const query = "SELECT * FROM Bitacora";
+    const query = "SELECT * FROM Bitacora order by fecha desc";
     try {
         const result = await pool.query(query);
         res.json(result[0]);
