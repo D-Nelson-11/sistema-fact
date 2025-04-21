@@ -64,3 +64,23 @@ export const DeleteInventario = async (req, res) => {
     }
 }
 
+export const getInventarioById = async (req, res) => {
+    const { id } = req.params;
+    const query = "SELECT * FROM inventario WHERE Codigo = ?";
+    try {
+        const result = await pool.query(query, [id]);
+        res.json(result[0].map((item) => {
+            return {
+                Id: item.Id,
+                Cantidad: 1,
+                Precio: item.Precio,
+                Codigo: item.Codigo,
+                Descripcion: item.Descripcion,
+                Existencia: item.Cantidad
+            }
+        }));
+    } catch (error) {
+        res.status(400).json({ error: error });
+    }
+}
+

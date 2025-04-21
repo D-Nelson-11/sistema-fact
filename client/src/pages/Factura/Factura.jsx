@@ -25,7 +25,6 @@ export default function Factura() {
   const [parametros, setParametros] = useState([]);
   const [valorDescuento, setValorDescuento] = useState(0);
   const [editable2, setEditable2] = useState(null); // Estado para rastrear qué fila se está editando
-
   useEffect(() => {
     async function GetData() {
       try {
@@ -44,43 +43,31 @@ export default function Factura() {
       const timeDiff = currentTime - lastInputTime.current;
 
       const SCAN_THRESHOLD = 100;
-      const SEQUENCE_THRESHOLD = 200;
 
-      if (timeDiff < SCAN_THRESHOLD) {
-        inputSequence.current += event.key;
-      } else if (
-        timeDiff < SEQUENCE_THRESHOLD &&
-        inputSequence.current.length > 0
-      ) {
-        inputSequence.current += event.key;
-      } else {
-        inputSequence.current = event.key;
+      // Ignorar tecla Enter al construir la secuencia
+      if (event.key !== "Enter") {
+        if (timeDiff < SCAN_THRESHOLD) {
+          inputSequence.current += event.key;
+        } else {
+          inputSequence.current = event.key;
+        }
       }
 
       lastInputTime.current = currentTime;
-    };
 
-    const handleKeyPress = (event) => {
+      // Procesar la secuencia cuando se presiona Enter
       if (event.key === "Enter") {
-        let scannedValue = inputSequence.current;
-
-        // Eliminar la palabra "Enter" si está al final
-        if (scannedValue.endsWith("Enter")) {
-          scannedValue = scannedValue.slice(0, -5);
-        }
-
-        handleScannedValue(scannedValue.trim()); // Limpiar espacios innecesarios
-        inputSequence.current = ""; // Limpiar la secuencia después de procesarla
+        handleScannedValue(inputSequence.current.trim());
+        inputSequence.current = ""; // Limpiar la secuencia
       }
     };
-    // Escuchar los eventos de teclado a nivel global
+
+    // Escuchar eventos de teclado a nivel global
     window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("keypress", handleKeyPress);
 
     return () => {
-      // Limpiar los eventos al desmontar el componente
+      // Limpiar eventos al desmontar el componente
       window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("keypress", handleKeyPress);
     };
   }, []);
 
@@ -110,6 +97,7 @@ export default function Factura() {
         alert("Producto no encontrado");
       }
     } catch (error) {
+      console.log(error);
       console.error("Error al obtener el producto:", error);
     }
   };
@@ -216,25 +204,28 @@ export default function Factura() {
   return (
     <div
       className="center d-flex h-auto justify-content-between flex-wrap"
-      style={{ width: "90%" }}>
-      <div style={{ width: "90%" }}>
+      style={{ width: "80%" }}>
+      <div style={{ width: "100%" }}>
         <div>
-          <h2  style={{
-            fontFamily: "Arial, sans-serif",
-            fontWeight: "bolder",
-            background: "linear-gradient(45deg, #1d54ae 30%, #df4e47 90%)",
-            padding: "30px",
-            color: "#fff",
-            borderRadius: "5px",
-            fontSize:"34px",
-            letterSpacing:"4px"
-          }}>Facturar</h2>
+          <h2
+            style={{
+              fontFamily: "Arial, sans-serif",
+              fontWeight: "bolder",
+              background: "linear-gradient(45deg, #1d54ae 30%, #df4e47 90%)",
+              padding: "30px",
+              color: "#fff",
+              borderRadius: "5px",
+              fontSize: "34px",
+              letterSpacing: "4px",
+            }}>
+            Facturar
+          </h2>
         </div>
-        <SearchBar items={items} setRowsHelp={AñadirProducto} />
       </div>
       <div
-        style={{ width: "10%" }}
+        style={{ width: "100%" }}
         className="d-flex align-items-center justify-content-end">
+        <SearchBar items={items} setRowsHelp={AñadirProducto} />
         <TfiReload
           style={{ color: "black", fontSize: "32px", cursor: "pointer" }}
           onClick={() => {
@@ -271,7 +262,11 @@ export default function Factura() {
       <div style={{ width: "70%" }}>
         <TableContainer
           component={Paper}
-          sx={{ width: "100%", height: "auto", maxHeight: "500px" }}>
+          sx={{
+            width: "100%",
+            maxHeight: 300,
+            boxShadow: "0px 10px 5px rgba(0, 0,0, 0.5)",
+          }}>
           <Table
             sx={{ minWidth: 600 }}
             aria-label="spanning table"
@@ -310,15 +305,17 @@ export default function Factura() {
                       row.Cantidad
                     )}
                   </TableCell>
-                  <TableCell align="left">{row.Precio.toLocaleString("en-US", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}</TableCell>
+                  <TableCell align="left">
+                    {row.Precio.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
+                  </TableCell>
                   <TableCell align="left">
                     {(row.Precio * row.Cantidad).toLocaleString("en-US", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}
                   </TableCell>
                   <TableCell align="left">
                     <button
@@ -333,10 +330,12 @@ export default function Factura() {
               <TableRow>
                 <TableCell rowSpan={3} />
                 <TableCell colSpan={2}>Subtotal</TableCell>
-                <TableCell align="left">{subTotal.toLocaleString("en-US", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}</TableCell>
+                <TableCell align="left">
+                  {subTotal.toLocaleString("en-US", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  })}
+                </TableCell>
               </TableRow>
               {parametros.length > 0 && (
                 <>
@@ -344,10 +343,13 @@ export default function Factura() {
                     <TableCell>Impuesto</TableCell>
                     <TableCell align="left">{`${parametros[4].Valor} %`}</TableCell>
                     <TableCell align="left">
-                      {((subTotal * parametros[4].Valor) / 100).toLocaleString("en-US", {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
+                      {((subTotal * parametros[4].Valor) / 100).toLocaleString(
+                        "en-US",
+                        {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>
@@ -382,19 +384,22 @@ export default function Factura() {
 
               {parametros.length > 0 && (
                 <>
-                  <TableRow>
+                  <TableRow
+                    style={{
+                      position: "sticky",
+                      bottom: 0,
+                      background: "#fff", // Fondo para evitar que se superponga al contenido
+                      boxShadow: "0 -2px 5px rgba(0, 0, 0, 0.1)", // Sombra para distinguir el footer
+                      zIndex: 2, // Asegura que esté sobre otras filas
+                    }}>
                     <TableCell></TableCell>
-
                     <TableCell
                       colSpan={2}
-                      sx={{ fontSize: "80px", fontWeight:"bolder"  }}
-                      align="left"
-                      >
+                      sx={{ fontSize: "50px", fontWeight: "bolder" }}
+                      align="left">
                       Total:
-              
                     </TableCell>
-
-                    <TableCell align="left" sx={{ fontSize: "60px" }}>
+                    <TableCell align="left" sx={{ fontSize: "50px" }}>
                       {(
                         subTotal -
                         (subTotal * valorDescuento) / 100 +

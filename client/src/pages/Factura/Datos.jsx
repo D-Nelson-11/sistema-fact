@@ -54,7 +54,7 @@ function Datos({ rows, setItems, setParametros, total, setRows }) {
 
   return (
     <div
-      style={{ width: "29.5%", backgroundColor: "#fff", height: "450px" }}
+      style={{ width: "29.5%", backgroundColor: "#fff", height: "auto", boxShadow:"0px 10px 5px rgba(0, 0,0, 0.5)" }}
       className="p-2 rounded-1">
       <Form>
         <Row>
@@ -132,7 +132,7 @@ function Datos({ rows, setItems, setParametros, total, setRows }) {
         <Form.Group className="mb-3 d-flex justify-content-between">
           <Button
             style={{
-              width: "49.5%",
+              width: "100%",
               backgroundColor: "#0a0a2a",
               border: "none",
             }}
@@ -141,14 +141,14 @@ function Datos({ rows, setItems, setParametros, total, setRows }) {
             }}>
             Factura
           </Button>
-          <Button
+          {/* <Button
             style={{
               width: "49.5%",
               backgroundColor: "#a4a4a4",
               border: "none",
             }}>
             Cotización
-          </Button>
+          </Button> */}
         </Form.Group>
       </Form>
     </div>

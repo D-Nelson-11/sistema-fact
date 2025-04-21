@@ -6,7 +6,7 @@ import { useAppContext } from "../../context/AppContext";
 import {toast} from 'sonner'
 
 export const Formulario = ({ row,closeModal }) => {
-  const { register, handleSubmit, setValue } = useForm();
+  const { register, handleSubmit, setValue, getValues } = useForm();
   const { setRows } = useAppContext();
 
   useEffect(() => {
@@ -60,15 +60,15 @@ export const Formulario = ({ row,closeModal }) => {
   return (
     <Form className="h-75 w-75" onSubmit={handleSubmit(submit)}>
       <Form.Group className="mb-3" controlId="exampleForm.ControlInput2">
-        <Form.Label>Descripción</Form.Label>
-        <Form.Control
+        {/* <Form.Control
           type="text"
           placeholder="Descripcion"
           {...register("Descripcion", { required: true })}
-        />
+          readOnly
+        /> */}
+        {setRows.length>0 &&(getValues("Descripcion"))}:
       </Form.Group>
       <Form.Group className="mb-3" controlId="exampleForm.ControlInput4">
-        <Form.Label>Valor</Form.Label>
         <Form.Control
           type="text"
           placeholder="Valor"

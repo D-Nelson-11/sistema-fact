@@ -7,7 +7,7 @@ import { useAppContext } from "../../context/AppContext";
 import { toast } from "sonner";
 import { set } from "react-hook-form";
 const columnas = [
-  { id: "Rol", label: "Rol", minWidth: 170 },
+  { id: "Rol", label: "Cargo", minWidth: 170 },
   { id: "Descripcion", label: "Descripcion", minWidth: 100 },
   { id: "Acciones", label: "Acciones", minWidth: 100 },
 ];
@@ -57,7 +57,7 @@ const Rol = () => {
   );
 
   return (
-    <div style={{width:"90%", margin:'auto'}}>
+    <div style={{width:"80%", margin:'40px auto'}}>
       <Tabla
         columns={columnas}
         rows={rows}
@@ -66,7 +66,7 @@ const Rol = () => {
         deleteRequest={deleteRequest}
         handleSearchChange={handleSearchChange}
         searchTerm={searchTerm}
-        titulo = {"Roles"}
+        titulo = {"Tareas"}
         modalBtnValue={user[1]?.some((permiso)=> permiso.IdObjeto == 5 && permiso.PermisoInsercion == 1) ? "Nuevo" : null}
         permisoConsulta={user[1]?.some((permiso)=> permiso.IdObjeto == 5 && permiso.PermisoConsultar ==1)}
         permisoActualizar={user[1]?.some((permiso)=> permiso.IdObjeto == 5 && permiso.PermisoActualizar == 1)}

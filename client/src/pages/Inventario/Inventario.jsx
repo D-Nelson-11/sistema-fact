@@ -11,7 +11,7 @@ const columnas = [
   { id: "Descripcion", label: "Nombre", minWidth: 300 },
   { id: "Existencia", label: "Cantidad", minWidth: 100, align: "center" },
   { id: "Precio", label: "Precio", minWidth: 100 , align: "center"},
-  { id: "Acciones", label: "Acciones", minWidth: 300 },
+  { id: "Acciones", label: "Acciones", minWidth: 250 },
 ];
 
 const Inventario = () => {
@@ -56,7 +56,7 @@ const Inventario = () => {
   );
 
   return (
-    <div style={{width:"90%", margin:'auto'}}>
+    <div style={{width:"80%", margin:'auto'}}>
       <Tabla
         columns={columnas}
         rows={rows}

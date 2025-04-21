@@ -52,7 +52,7 @@ const Bitacora = () => {
   );
 
   return (
-    <div style={{width:"90%", margin:'auto'}}>
+    <div style={{width:"80%", margin:'40px auto'}}>
       <Tabla
         columns={columnas}
         rows={rows}

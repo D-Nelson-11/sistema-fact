@@ -1,0 +1,17 @@
+.btnStyles {
+    background: #a4a4a4;
+    text-decoration: none;
+    padding: 8px;
+    border-radius: 3px;
+    border: none;
+    display: block;
+    margin-top: 5px;
+    text-align: center;
+    color: #fff;
+    font-weight: bolder;
+    letter-spacing: 4px;
+}
+
+.btnStyles:hover{
+    background: #0a0a2a;
+}

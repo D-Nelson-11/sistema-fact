@@ -80,8 +80,8 @@ export default function Tabla({
       </div>
 
       <Paper sx={{ width: "100%", overflow: "hidden" }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
-          <Table stickyHeader aria-label="sticky table">
+        <TableContainer sx={{ maxHeight: 300 }}>
+          <Table stickyHeader aria-label="sticky table" sx={{boxShadow:"0px 10px 5px rgba(0, 0,0, 0.5)"}}>
             <TableHead>
               <TableRow>
                 {columns?.map((column) => (
